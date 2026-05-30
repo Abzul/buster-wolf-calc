@@ -2,8 +2,6 @@
 
 Interactive kill percent calculator for Terry Bogard's **Buster Wolf** in Super Smash Bros. Ultimate. Shows the exact percentage at which Buster Wolf kills every character in the roster, across 8 legal stages, with configurable rage and DI.
 
-![screenshot](screenshot.png)
-
 ## Features
 
 - **All 88 characters** with weight, fallspeed, and gravity stats
