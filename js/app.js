@@ -1,5 +1,5 @@
 let selectedChar = null;
-let selectedRage = RAGE_LEVELS[4];
+let selectedRage = RAGE_LEVELS[0];
 let selectedDI = 'none';
 let selectedStage = 'fd';
 let sortMode = 'name';
@@ -141,6 +141,9 @@ function navigateChar(dir) {
 
 function setupEventListeners() {
   document.getElementById('underlay').addEventListener('click', closeModal);
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('prev-char').addEventListener('click', () => navigateChar(-1));
   document.getElementById('next-char').addEventListener('click', () => navigateChar(1));

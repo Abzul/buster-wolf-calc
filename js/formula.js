@@ -50,12 +50,11 @@ const STAGES = {
 };
 
 const RAGE_LEVELS = [
-  { label: "0%",   value: 0,   mult: 1.0 },
-  { label: "50%",  value: 50,  mult: rageMultiplier(50) },
-  { label: "60%",  value: 60,  mult: rageMultiplier(60) },
-  { label: "80%",  value: 80,  mult: rageMultiplier(80) },
   { label: "100%", value: 100, mult: rageMultiplier(100) },
-  { label: "125%", value: 125, mult: rageMultiplier(125) },
+  { label: "110%", value: 110, mult: rageMultiplier(110) },
+  { label: "120%", value: 120, mult: rageMultiplier(120) },
+  { label: "130%", value: 130, mult: rageMultiplier(130) },
+  { label: "140%", value: 140, mult: rageMultiplier(140) },
   { label: "150%", value: 150, mult: rageMultiplier(150) }
 ];
 
