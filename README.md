@@ -58,7 +58,7 @@ Data and formula extracted from [rubendal/SSBU-Calculator](https://github.com/ru
 
 [https://abzul.github.io/buster-wolf-calc/](https://abzul.github.io/buster-wolf-calc/)
 
-## v2.0 — Changelog
+## v1.0.1 — Changelog
 
 - **Dark/Light mode** — toggle ☾/☀ con persistencia en localStorage
 - **FAQ / About** — modal con acordeón explicando Buster Wolf, fórmula, rage, DI, blast zones, kill confirms y el origen de "Are you OK?"
