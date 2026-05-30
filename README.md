@@ -57,3 +57,17 @@ Data and formula extracted from [rubendal/SSBU-Calculator](https://github.com/ru
 ## Live site
 
 [https://abzul.github.io/buster-wolf-calc/](https://abzul.github.io/buster-wolf-calc/)
+
+## v2.0 — Changelog
+
+- **Dark/Light mode** — toggle ☾/☀ con persistencia en localStorage
+- **FAQ / About** — modal con acordeón explicando Buster Wolf, fórmula, rage, DI, blast zones, kill confirms y el origen de "Are you OK?"
+- **Modal header redesign** — color sólido del personaje + spray thumbnail al lado del nombre
+- **Favicon** — spray de Terry en el tab del navegador
+- **Accessibility** — skip to content, focus trap en modals, ARIA labels/pressed, roles
+- **Search debounce** — 150ms para evitar re-renders innecesarios
+- **Empty state** — mensaje cuando no hay resultados de búsqueda
+- **Image fallback** — inicial del personaje si la CDN falla
+- **Social links** — X y Discord en sidebar + créditos
+- **Responsive** — sidebar full-width en mobile
+- **Meta tags OG** — preview en redes sociales

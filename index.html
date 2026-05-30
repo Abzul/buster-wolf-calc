@@ -1,70 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Buster Wolf % Reference</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+<title>Buster Wolf % — Kill Percents</title>
+<meta name="description" content="Buster Wolf kill percent calculator for Terry Bogard in Super Smash Bros. Ultimate. Calculate exact KO percents for all 88 characters across 8 stages with rage and DI settings.">
+<meta property="og:title" content="Buster Wolf % Reference">
+<meta property="og:description" content="Buster Wolf kill percent calculator for Terry Bogard in SSBU. KO percents for all 88 characters, 8 stages, rage &amp; DI settings.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://abzul.github.io/buster-wolf-calc/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.smashbros.com/assets_v2/img/fighter/pict/terry.png" sizes="32x32">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Oswald:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;font-family:'Roboto',Arial,sans-serif;background:#1a1a2e;color:#fff;-webkit-font-smoothing:antialiased;min-height:100vh}
+:root{--bg:#1a1a2e;--bg2:#0d0d2b;--bg3:#16163a;--text:#fff;--text2:#ccc;--text3:#888;--text4:#aaa;--accent:#ffd700;--accent2:#ffd70044;--card-bg:rgba(0,0,0,0.5);--modal-bg:#16163a;--modal-border:#ffd70033;--sidebar-bg:#0d0d2b;--header-from:#0d0d2b;--header-to:#1a1a4e;--btn-border:#ffd70044;--btn-text:#ccc;--btn-active-text:#1a1a2e;--input-bg:#0d0d2b;--input-border:#ffd70044;--stat-bg:#0d0d2b;--stat-val:#ffd700;--stage-row-border:rgba(255,255,255,0.06);--sticky-bg:#0d0d2b;--confirm-bg:#0d0d2b;--diff-very-hard-bg:#E65100;--diff-hard-bg:#FF9800;--diff-average-bg:#FFEB3B;--diff-average-text:#333;--diff-easy-bg:#4CAF50;--diff-very-easy-bg:#8BC34A;--modal-shadow:0 8px 40px rgba(0,0,0,0.5);--notif-bg:#ffd700;--notif-text:#1a1a2e;--notif-shadow:0 4px 20px rgba(255,215,0,0.3);--sidebar-width:260px;--underline-color:#ffd70022;--char-name-dark:#333}
+[data-theme="light"]{--bg:#f5f0ef;--bg2:#e8e3e2;--bg3:#ffffff;--text:#1a1a2e;--text2:#333;--text3:#666;--text4:#555;--accent:#E04447;--accent2:#E0444733;--card-bg:rgba(0,0,0,0.06);--modal-bg:#ffffff;--modal-border:#E0444733;--sidebar-bg:#e8e3e2;--header-from:#C41E3A;--header-to:#E04447;--btn-border:#E0444733;--btn-text:#444;--btn-active-text:#fff;--input-bg:#fff;--input-border:#E0444755;--stat-bg:#e8e3e2;--stat-val:#C41E3A;--stage-row-border:rgba(0,0,0,0.06);--sticky-bg:#f5f0ef;--confirm-bg:#e8e3e2;--modal-shadow:0 8px 40px rgba(0,0,0,0.12);--notif-bg:#E04447;--notif-text:#fff;--notif-shadow:0 4px 20px rgba(224,68,71,0.3);--underline-color:rgba(0,0,0,0.08);--char-name-dark:#333}
+[data-theme="light"] header .logo h1{color:#fff}
+[data-theme="light"] header .logo span{color:#000}
+[data-theme="light"] #sidebar-toggle,
+[data-theme="light"] #theme-toggle,
+[data-theme="light"] #faq-toggle{color:#fff}
+[data-theme="light"] header{border-bottom-color:rgba(255,255,255,0.3)}
+.skip-link{position:fixed;top:-40px;left:8px;z-index:999;background:var(--accent);color:var(--btn-active-text);padding:8px 16px;border-radius:0 0 4px 4px;font-size:14px;font-weight:700;text-decoration:none;transition:top 0.2s}
+.skip-link:focus{top:0}
+body{margin:0;font-family:'Roboto',Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
 body.no-scroll{overflow:hidden}
 
-header{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(135deg,#0d0d2b,#1a1a4e);height:56px;display:flex;align-items:center;padding:0 12px;border-bottom:2px solid #ffd700;box-shadow:0 2px 12px rgba(255,215,0,0.15)}
+header{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(135deg,var(--header-from),var(--header-to));height:56px;display:flex;align-items:center;padding:0 12px;border-bottom:2px solid var(--accent);box-shadow:0 2px 12px rgba(0,0,0,0.2)}
 header .logo{display:flex;align-items:center;gap:10px;flex:1}
-header .logo h1{font-size:18px;font-weight:900;margin:0;color:#ffd700;text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 10px rgba(255,215,0,0.3)}
-header .logo span{font-size:12px;color:#aaa;letter-spacing:2px;text-transform:uppercase;display:none}
+header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;margin:0;color:#E04447;text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 10px rgba(224,68,71,0.3)}
+header .logo span{font-size:12px;color:var(--text4);letter-spacing:2px;text-transform:uppercase;display:none}
 @media(min-width:600px){header .logo span{display:inline}}
 
 .header-controls{display:flex;align-items:center;gap:6px}
 
-#sidebar-toggle{background:none;border:none;color:#ffd700;font-size:24px;cursor:pointer;padding:8px;display:flex;align-items:center;margin-right:4px}
-#sidebar-toggle:hover{color:#fff}
+#theme-toggle{background:none;border:none;color:var(--accent);font-size:20px;cursor:pointer;padding:6px;display:flex;align-items:center;border-radius:4px;transition:all 0.15s}
+#theme-toggle:hover{color:var(--text);background:rgba(255,255,255,0.1)}
 
-#sidebar{position:fixed;top:56px;left:-260px;bottom:0;width:260px;z-index:19;background:#0d0d2b;border-right:1px solid #ffd70033;transition:left 0.25s ease;overflow-y:auto;padding:12px}
+#faq-toggle{background:none;border:none;color:var(--accent);font-size:18px;cursor:pointer;padding:6px 10px;display:flex;align-items:center;border-radius:4px;font-weight:900;transition:all 0.15s}
+#faq-toggle:hover{color:var(--text);background:rgba(255,255,255,0.1)}
+
+#sidebar-toggle{background:none;border:none;color:var(--accent);font-size:24px;cursor:pointer;padding:8px;display:flex;align-items:center;margin-right:4px}
+#sidebar-toggle:hover{color:var(--text)}
+
+#sidebar{position:fixed;top:56px;left:calc(-1 * var(--sidebar-width));bottom:0;width:var(--sidebar-width);z-index:19;background:var(--sidebar-bg);border-right:1px solid var(--accent2);transition:left 0.25s ease;overflow-y:auto;padding:12px;display:flex;flex-direction:column}
+#sidebar .filter-group:last-of-type{margin-bottom:0}
 #sidebar.open{left:0}
 
+#sidebar-footer{margin-top:auto;padding:12px 0 4px;border-top:1px solid var(--underline-color);font-size:11px}
+#sidebar-footer .social-links{display:flex;gap:10px;margin-bottom:6px}
+#sidebar-footer .social-links a{color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:4px;transition:color 0.15s}
+#sidebar-footer .social-links a:hover{color:var(--accent)}
+#sidebar-footer .credits{color:var(--text3);line-height:1.4}
+#sidebar-footer .credits a{color:var(--accent);text-decoration:none}
 .filter-group{margin-bottom:14px}
-.filter-group label{display:block;font-size:11px;font-weight:700;color:#ffd700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.filter-group label{display:block;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
 .btn-row{display:flex;flex-wrap:wrap;gap:4px}
-.btn-row button{flex:1;min-width:38px;padding:6px 4px;font-size:11px;font-weight:700;border:1px solid #ffd70044;background:transparent;color:#ccc;border-radius:4px;cursor:pointer;transition:all 0.15s;text-align:center}
-.btn-row button:hover{border-color:#ffd700;color:#fff}
-.btn-row button.active{background:#ffd700;color:#1a1a2e;border-color:#ffd700;font-weight:900}
+.btn-row button{flex:1;min-width:38px;padding:6px 4px;font-size:11px;font-weight:700;border:1px solid var(--btn-border);background:transparent;color:var(--btn-text);border-radius:4px;cursor:pointer;transition:all 0.15s;text-align:center}
+.btn-row button:hover{border-color:var(--accent);color:var(--text)}
+.btn-row button.active{background:var(--accent);color:var(--btn-active-text);border-color:var(--accent);font-weight:900}
 .btn-row .sort-option{flex:1;display:flex;align-items:center;justify-content:center;gap:2px}
 
 #main{margin-top:56px;padding:8px}
 
 .search-box{position:relative;max-width:400px}
-.search-box input{width:100%;padding:8px 32px 8px 10px;background:#0d0d2b;border:1px solid #ffd70044;border-radius:4px;color:#fff;font-size:14px;outline:none}
-.search-box input:focus{border-color:#ffd700}
-.search-box input::placeholder{color:#666}
-.search-box .clear-btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:#666;cursor:pointer;font-size:16px;display:none}
+.search-box input{width:100%;padding:8px 32px 8px 10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:4px;color:var(--text);font-size:14px;outline:none}
+.search-box input:focus{border-color:var(--accent)}
+.search-box input::placeholder{color:var(--text3)}
+.search-box .clear-btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;display:none}
 .search-box.active .clear-btn{display:block}
 
 #character-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;max-width:1400px;margin:0 auto;padding:8px 0}
 @media(min-width:600px){#character-list{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}}
 @media(min-width:1024px){#character-list{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}}
+#character-list .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text3);font-size:16px}
+#character-list .empty-state .empty-icon{font-size:48px;display:block;margin-bottom:12px;opacity:0.5}
 
 .character-box{border-radius:6px;overflow:hidden;cursor:pointer;position:relative;height:100px;transition:transform 0.15s,box-shadow 0.15s;display:flex;align-items:flex-end;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
-.character-box .char-portrait{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.5;pointer-events:none}
+.character-box .char-portrait{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.5;pointer-events:none;background:var(--card-bg)}
+.character-box .char-img-fallback{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:rgba(255,255,255,0.2);pointer-events:none;background:var(--card-bg)}
 .character-box .characterImageContainer{position:absolute;inset:0}
-.character-box:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(255,215,0,0.2)}
+.character-box:hover{transform:translateY(-2px);box-shadow:0 4px 16px var(--accent2)}
 .character-box .characterName{display:none}
 .characterTitleBar{width:100%;background:linear-gradient(transparent,rgba(0,0,0,0.85));padding:20px 8px 6px;font-size:12px;font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.8)}
 .grid-percRange{position:absolute;top:6px;right:6px;background:#e03838;color:#fff;padding:1px 6px;border-radius:3px;font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,0.3)}
-.grid-weight{position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.5);color:#fff;padding:1px 6px;border-radius:3px;font-size:12px;font-weight:700}
+.grid-weight{position:absolute;top:6px;left:6px;background:var(--card-bg);color:var(--text);padding:1px 6px;border-radius:3px;font-size:12px;font-weight:700}
 
 #underlay{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,0.7);opacity:0;pointer-events:none;transition:opacity 0.25s}
 #underlay.active{opacity:1;pointer-events:auto}
 
-#modal{position:fixed;z-index:31;top:56px;left:0;right:0;bottom:0;transform:translateY(110%);transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);overflow-y:auto}
-#modal.active{transform:translateY(0)}
+#modal,#faq-modal{position:fixed;z-index:31;top:56px;left:0;right:0;bottom:0;transform:translateY(110%);transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);overflow-y:auto}
+#modal.active,#faq-modal.active{transform:translateY(0)}
+#faq-modal{z-index:32}
 
-.modal-inner{max-width:600px;margin:0 auto 20px;background:#16163a;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5);border:1px solid #ffd70033;border-top:none}
+.modal-inner{max-width:600px;margin:0 auto 20px;background:var(--modal-bg);border-radius:0 0 12px 12px;overflow:hidden;box-shadow:var(--modal-shadow);border:1px solid var(--modal-border);border-top:none}
 
 .modal-header{position:relative;padding:24px 20px 16px;min-height:100px;display:flex;flex-direction:column;justify-content:flex-end}
-.modal-header .char-name{font-size:28px;font-weight:900;margin:0;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
-.modal-header .char-name.text-dark{color:#333}
+.modal-name-row{display:flex;align-items:center;gap:12px;margin-top:8px}
+.modal-thumb{width:48px;height:48px;object-fit:contain;border-radius:4px;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
+.modal-header .char-name{font-size:28px;font-weight:900;margin:0}
+.modal-header .char-name.text-dark{color:var(--char-name-dark)}
 .modal-header .char-name:not(.text-dark){color:#fff}
 .modal-header .back-btn{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.3);border:none;color:#fff;font-size:22px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s}
 .modal-header .back-btn:hover{background:rgba(0,0,0,0.6)}
@@ -75,39 +111,60 @@ header .logo span{font-size:12px;color:#aaa;letter-spacing:2px;text-transform:up
 .modal-body{padding:16px 20px}
 
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
-.stat-card{background:#0d0d2b;border-radius:8px;padding:10px 8px;text-align:center}
-.stat-card .stat-val{font-size:20px;font-weight:900;color:#ffd700}
-.stat-card .stat-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.stat-card{background:var(--stat-bg);border-radius:8px;padding:10px 8px;text-align:center}
+.stat-card .stat-val{font-size:20px;font-weight:900;color:var(--stat-val)}
+.stat-card .stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
 
 .kill-section{margin-bottom:16px}
-.kill-section h3{font-size:13px;font-weight:700;color:#ffd700;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px}
+.kill-section h3{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin:0 0 8px}
 .kill-boxes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.kill-box{background:#0d0d2b;border-radius:8px;padding:12px;text-align:center}
+.kill-box{background:var(--stat-bg);border-radius:8px;padding:12px;text-align:center}
 .kill-box .kill-val{font-size:28px;font-weight:900;color:#ff4444}
 .kill-box .kill-val.good{color:#4CAF50}
-.kill-box .kill-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.kill-box .kill-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
 
 .diff-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:700;text-transform:uppercase}
-.very-hard{background:#E65100;color:#fff}
-.hard{background:#FF9800;color:#fff}
-.average{background:#FFEB3B;color:#333}
-.easy{background:#4CAF50;color:#fff}
-.very-easy{background:#8BC34A;color:#fff}
+.very-hard{background:var(--diff-very-hard-bg);color:#fff}
+.hard{background:var(--diff-hard-bg);color:#fff}
+.average{background:var(--diff-average-bg);color:var(--diff-average-text)}
+.easy{background:var(--diff-easy-bg);color:#fff}
+.very-easy{background:var(--diff-very-easy-bg);color:#fff}
 
 .stages-table{width:100%;border-collapse:collapse;font-size:13px}
-.stages-table th{text-align:left;padding:6px 8px;color:#ffd700;font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #ffd70022}
-.stages-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.stages-table th{text-align:left;padding:6px 8px;color:var(--accent);font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--underline-color)}
+.stages-table td{padding:6px 8px;border-bottom:1px solid var(--stage-row-border)}
 .stages-table tr:last-child td{border-bottom:none}
 .stages-table .stg{font-weight:700}
 .stages-table .ctr{color:#ff6b6b;font-weight:700}
 .stages-table .ldg{color:#69db7c;font-weight:700}
-.stages-table .diff-span{display:block;font-size:10px;color:#888}
+.stages-table .diff-span{display:block;font-size:10px;color:var(--text3)}
 
-.sticky-settings{position:sticky;top:0;z-index:5;background:#0d0d2b;padding:10px 20px;border-bottom:1px solid #ffd70022}
+.sticky-settings{position:sticky;top:0;z-index:5;background:var(--sticky-bg);padding:10px 20px;border-bottom:1px solid var(--underline-color)}
 .sticky-settings .settings-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.sticky-settings .settings-row label{font-size:10px;color:#ffd700;text-transform:uppercase;font-weight:700;margin-right:4px}
+.sticky-settings .settings-row label{font-size:10px;color:var(--accent);text-transform:uppercase;font-weight:700;margin-right:4px}
 
-.notification{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:100;background:#ffd700;color:#1a1a2e;padding:10px 20px;border-radius:8px;font-weight:700;font-size:14px;box-shadow:0 4px 20px rgba(255,215,0,0.3);display:none}
+.notification{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:100;background:var(--notif-bg);color:var(--notif-text);padding:10px 20px;border-radius:8px;font-weight:700;font-size:14px;box-shadow:var(--notif-shadow);display:none}
+
+/* FAQ accordion */
+.faq-header{background:var(--stat-bg);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.faq-header h2{font-size:20px;font-weight:900;color:var(--accent);margin:0}
+.faq-back{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px;display:flex}
+.faq-back:hover{color:var(--accent)}
+
+.accordion{margin:0}
+.accordion-item{border-bottom:1px solid var(--underline-color)}
+.accordion-btn{width:100%;background:var(--modal-bg);border:none;padding:14px 20px;font-size:14px;font-weight:700;color:var(--text);cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s}
+.accordion-btn:hover{background:var(--stat-bg)}
+.accordion-btn .arrow{font-size:12px;transition:transform 0.2s;color:var(--accent)}
+.accordion-btn.open .arrow{transform:rotate(180deg)}
+.accordion-panel{max-height:0;overflow:hidden;transition:max-height 0.25s ease, padding 0.25s ease;padding:0 20px;font-size:13px;line-height:1.6;color:var(--text2)}
+.accordion-panel.open{max-height:2000px;padding:0 20px 16px}
+.accordion-panel strong{color:var(--accent)}
+.accordion-panel code{background:var(--stat-bg);padding:1px 5px;border-radius:3px;font-size:12px}
+.accordion-panel table{width:100%;border-collapse:collapse;margin:8px 0;font-size:12px}
+.accordion-panel th{text-align:left;padding:5px 8px;color:var(--accent);border-bottom:1px solid var(--underline-color);font-weight:700}
+.accordion-panel td{padding:5px 8px;border-bottom:1px solid var(--stage-row-border)}
+.accordion-panel .note{display:block;margin-top:6px;font-size:11px;color:var(--text3);font-style:italic}
 
 @media(max-width:480px){
   .stats-row{grid-template-columns:repeat(2,1fr)}
@@ -116,17 +173,23 @@ header .logo span{font-size:12px;color:#aaa;letter-spacing:2px;text-transform:up
   .character-box{height:80px}
   .characterTitleBar{font-size:10px;padding:14px 6px 4px}
   .modal-inner{border-radius:0}
+  #sidebar{width:100%;left:-100%}
+  #sidebar.open{left:0}
 }
 </style>
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 <header>
-  <button id="sidebar-toggle" aria-label="Menu">&#9776;</button>
+  <button id="sidebar-toggle" aria-label="Open menu">&#9776;</button>
   <div class="logo">
     <h1>BUSTER WOLF %</h1>
     <span>Terry Bogard · SSBU</span>
   </div>
-  <div class="header-controls"></div>
+  <div class="header-controls">
+    <button id="theme-toggle" aria-label="Toggle dark/light mode">&#x263E;</button>
+    <button id="faq-toggle" aria-label="Open FAQ">?</button>
+  </div>
 </header>
 
 <div id="sidebar">
@@ -175,6 +238,22 @@ header .logo span{font-size:12px;color:#aaa;letter-spacing:2px;text-transform:up
       <button class="sort-option" data-sort="fallspeed">Fallspeed<span class="sort-arrow"></span></button>
     </div>
   </div>
+  <div id="sidebar-footer">
+    <div class="social-links">
+      <a href="https://x.com/abzul_" target="_blank" rel="noopener" aria-label="Twitter / X">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @abzul_
+      </a>
+      <a href="https://discord.com/users/plagaax" target="_blank" rel="noopener" aria-label="Discord">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
+        Discord
+      </a>
+    </div>
+    <div class="credits">
+      Data labbed by <a href="https://x.com/abzul_" target="_blank" rel="noopener">@abzul_</a><br>
+      Inspired by <a href="https://monke.gg" target="_blank" rel="noopener">monke.gg</a>
+    </div>
+  </div>
 </div>
 
 <div id="main">
@@ -183,15 +262,18 @@ header .logo span{font-size:12px;color:#aaa;letter-spacing:2px;text-transform:up
 
 <div id="underlay"></div>
 
-<div id="modal">
+<div id="modal" aria-hidden="true">
   <div class="modal-inner">
     <div class="modal-header" id="modal-header">
       <button class="back-btn" id="modal-close">&#x2190;</button>
       <div class="nav-arrows">
-        <button id="prev-char" onclick="prevChar()">&#x276E;</button>
-        <button id="next-char" onclick="nextChar()">&#x276F;</button>
+        <button id="prev-char">&#x276E;</button>
+        <button id="next-char">&#x276F;</button>
       </div>
-      <h2 class="char-name" id="modal-name"></h2>
+      <div class="modal-name-row">
+        <img class="modal-thumb" id="modal-thumb" alt="">
+        <h2 class="char-name" id="modal-name"></h2>
+      </div>
     </div>
     <div class="sticky-settings">
       <div class="settings-row">
@@ -245,12 +327,133 @@ header .logo span{font-size:12px;color:#aaa;letter-spacing:2px;text-transform:up
         <div id="modal-stages"></div>
       </div>
 
-      <div class="kill-section" style="margin-top:12px;padding:10px;background:#0d0d2b;border-radius:8px;font-size:12px;color:#aaa">
-        <strong style="color:#ffd700">Kill confirms:</strong><br>
+      <div class="kill-section" style="margin-top:12px;padding:10px;background:var(--confirm-bg);border-radius:8px;font-size:12px;color:var(--text3)">
+        <strong style="color:var(--accent)">Kill confirms:</strong><br>
         Dtilt → Buster Wolf (true ~60-90% depending on weight)<br>
         Ftilt → Buster Wolf (pre-tumble, DI-dependent)<br>
         Jab1+Jab2 → Buster Wolf<br>
-        <span style="display:block;margin-top:4px;font-size:11px;color:#666">Buster Wolf only available when Terry is at 100%+ (GO! meter active)</span>
+        <span style="display:block;margin-top:4px;font-size:11px;color:var(--text4)">Buster Wolf only available when Terry is at 100%+ (GO! meter active)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="faq-modal" aria-hidden="true">
+  <div class="modal-inner">
+    <div class="faq-header">
+      <button class="faq-back" id="faq-close" aria-label="Close FAQ">&#x2190;</button>
+      <h2>About Buster Wolf</h2>
+    </div>
+    <div class="modal-body" style="padding:0">
+      <div class="accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">What is Buster Wolf? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>Buster Wolf is Terry Bogard's <strong>Super Special Move</strong> in Super Smash Bros. Ultimate, originating from <em>Garou: Mark of the Wolves</em>. It's a "hitgrab" — Terry dashes forward and, if he connects, detonates a massive explosion.</p>
+            <p><strong>Move data:</strong></p>
+            <p><strong>Input:</strong> <code>↓ ↘ → ↓ ↘ → + A/B</code> (simplified: <code>↓ → ↓ → + A/B</code>)</p>
+            <p><strong>Availability:</strong> Only when Terry has <strong>100%+</strong> damage (GO! meter active)</p>
+            <p><strong>Damage:</strong> 5% (initial hit) + 20% (explosion) + 15% (collateral) = <strong>40% total</strong></p>
+            <p><strong>BKB:</strong> 73 | <strong>KBG:</strong> 63 | <strong>Angle:</strong> 0° (horizontal)</p>
+            <p><strong>Armor:</strong> 8% damage-based armor on frames 1-15</p>
+            <p><strong>KO potential:</strong> As early as <strong>~35% at the ledge</strong>, before <strong>~120% from center stage</strong></p>
+            <p class="note">Buster Wolf only works on the ground. If the opponent shields, the hitgrab doesn't grab and Terry is left at -45 frames disadvantage.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">How does the knockback formula work? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>This calculator uses the <strong>exact SSBU knockback formula</strong>:</p>
+            <p><code>kb = ((p/10 + p × d / 20) × 1.4 × (200 / (weight + 100)) + 18) × (KBG / 100) + BKB</code></p>
+            <p>Where:</p>
+            <p><strong>p</strong> = opponent's pre-hit % + 20 (Buster Wolf damage)<br>
+            <strong>d</strong> = 20 (base damage)<br>
+            <strong>weight</strong> = character weight (135 Bowser → 62 Pichu)<br>
+            <strong>BKB</strong> = 73, <strong>KBG</strong> = 63</p>
+            <p>After raw knockback, we apply:</p>
+            <p>1. <strong>Rage multiplier</strong> (1.0× at 100% → 1.1× at 150%)<br>
+            2. <strong>DI factor</strong> (1.0 no DI / 0.87 optimal DI)</p>
+            <p>The calculator uses <strong>binary search</strong> between 0-200% to find the exact percent where knockback exceeds the stage's blast zone threshold.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">What is rage and how does it affect kills? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>Rage is the knockback bonus Terry gets from his own damage. Since Buster Wolf is only available at <strong>100%+</strong>, rage is always a factor for this move.</p>
+            <table>
+              <tr><th>Terry %</th><th>Multiplier</th></tr>
+              <tr><td>100%</td><td>1.00×</td></tr>
+              <tr><td>110%</td><td>1.02×</td></tr>
+              <tr><td>120%</td><td>1.04×</td></tr>
+              <tr><td>130%</td><td>1.06×</td></tr>
+              <tr><td>140%</td><td>1.08×</td></tr>
+              <tr><td>150%</td><td>1.10×</td></tr>
+            </table>
+            <p>Higher rage = lower opponent kill percent. At 150%, you'll kill roughly <strong>5-8% earlier</strong> than at 100%.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">What is DI and how does it affect kill percents? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p><strong>Directional Influence (DI)</strong> allows the opponent to slightly alter their launch trajectory. Against Buster Wolf (0° angle), the optimal DI is <strong>up</strong> (perpendicular to the launch angle), which reduces total knockback by approximately <strong>13%</strong>.</p>
+            <table>
+              <tr><th>DI Setting</th><th>Knockback</th><th>Effect</th></tr>
+              <tr><td>No DI</td><td>100%</td><td>Baseline kill percents</td></tr>
+              <tr><td>Optimal DI</td><td>~87%</td><td>Kill percents ~5-10% higher</td></tr>
+            </table>
+            <p>When playing, assume your opponent will DI optimally. The "No DI" setting shows the theoretical best case for Terry.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">How do stage blast zones work? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>Each stage has different <strong>blast zone</strong> sizes — the invisible walls where KOs happen. Buster Wolf launches horizontally (0°), so horizontal blast zone distance matters most.</p>
+            <table>
+              <tr><th>Stage</th><th>Center KB</th><th>Ledge KB</th></tr>
+              <tr><td>Final Destination</td><td>200.0</td><td>150.2</td></tr>
+              <tr><td>Battlefield</td><td>197.5</td><td>149.0</td></tr>
+              <tr><td>Smashville</td><td>201.0</td><td>149.5</td></tr>
+              <tr><td>Town &amp; City</td><td>202.0</td><td>151.2</td></tr>
+              <tr><td>Pokémon Stadium 2</td><td>199.0</td><td>150.2</td></tr>
+              <tr><td>Kalos Pokémon League</td><td>197.0</td><td>148.2</td></tr>
+              <tr><td>Hollow Bastion</td><td>200.0</td><td>150.2</td></tr>
+              <tr><td>Yggdrasil's Altar</td><td>199.0</td><td>149.2</td></tr>
+            </table>
+            <p><strong>Kalos Pokémon League</strong> has the smallest blast zones (easiest to kill).<br>
+            <strong>Town &amp; City</strong> has the largest (hardest to kill).</p>
+            <p>The <strong>Center Stage</strong> column requires more knockback (further from blast zone).<br>
+            The <strong>At Ledge</strong> column requires less (closer to blast zone).</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">How do I confirm into Buster Wolf? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p><strong>Kill confirms (true combos):</strong></p>
+            <p><strong>F-tilt → Buster Wolf:</strong> The main confirm. Works pre-tumble at mid percents. DI-dependent — opponent can DI down and tech to escape.</p>
+            <p><strong>D-tilt → Buster Wolf:</strong> True from ~60-90% depending on weight. A single D-tilt hit confirms directly.</p>
+            <p><strong>D-tilt → Jab 1+2 → Buster Wolf:</strong> Works at lower percents. The easiest confirm to execute.</p>
+            <p><strong>Key tips:</strong></p>
+            <p>Buster Wolf is <strong>unsafe on shield</strong> (-45 frames). Don't throw it out raw.<br>
+            Buster Wolf beats <strong>Wonderwing</strong> (Banjo), <strong>Revenge</strong> (Incineroar), and <strong>Rebel's Guard</strong> (Joker) because it's a hitgrab.<br>
+            If the opponent is <strong>prone</strong> (on the ground), the initial hit won't trigger the grab — you'll get minimal damage and be heavily punished.</p>
+            <p class="note">You can cancel the initial hit of Buster Wolf into Triple Wolf (Final Smash).</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">The origin of "Are you OK?" <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>The famous "Are you OK?" line Terry says when starting Buster Wolf has a surprising origin. A child at a theme park in Los Angeles saw <strong>Yasuyuki Oda</strong> (SNK designer) exit a water ride soaking wet and asked if he was okay. The moment became an inside joke at SNK and was eventually recorded as the voice clip for Terry's most iconic move.</p>
+            <p>During development of <em>Garou: Mark of the Wolves</em>, Buster Wolf was originally going to be called <strong>"God Twin Geyser"</strong>.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -263,29 +466,6 @@ header .logo span{font-size:12px;color:#aaa;letter-spacing:2px;text-transform:up
 <script src="js/app.js"></script>
 <script>
 init();
-
-function prevChar() {
-  if (!selectedChar) return;
-  let chars = getFilteredAndSortedChars();
-  let idx = chars.findIndex(c => c.id === selectedChar.id);
-  if (idx > 0) openCharacter(chars[idx - 1]);
-}
-function nextChar() {
-  if (!selectedChar) return;
-  let chars = getFilteredAndSortedChars();
-  let idx = chars.findIndex(c => c.id === selectedChar.id);
-  if (idx < chars.length - 1) openCharacter(chars[idx + 1]);
-}
-
-document.getElementById('search').addEventListener('input', function() {
-  let box = document.getElementById('search-box');
-  if (this.value) box.classList.add('active');
-  else box.classList.remove('active');
-});
-document.getElementById('search-clear').addEventListener('click', function() {
-  document.getElementById('search').value = '';
-  document.getElementById('search').dispatchEvent(new Event('input'));
-});
 </script>
 </body>
 </html>

@@ -5,16 +5,42 @@ let selectedStage = 'fd';
 let sortMode = 'name';
 let sortAsc = true;
 let searchQuery = '';
+let focusableElements = [];
+let lastFocusedEl = null;
+
+function debounce(fn, ms) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
+function showToast(msg) {
+  let el = document.getElementById('notification');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(el._hide);
+  el._hide = setTimeout(() => { el.style.display = 'none'; }, 2000);
+}
 
 function init() {
   renderGrid();
   setupEventListeners();
+  applyTheme();
 }
 
 function renderGrid() {
   let list = document.getElementById('character-list');
   let chars = getFilteredAndSortedChars();
   list.innerHTML = '';
+  if (chars.length === 0) {
+    let empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.innerHTML = '<span class="empty-icon">&#x1F50D;</span>No characters match "<strong>' + searchQuery + '</strong>"';
+    list.appendChild(empty);
+    return;
+  }
   chars.forEach(c => {
     let box = document.createElement('div');
     box.className = 'character-box';
@@ -23,7 +49,8 @@ function renderGrid() {
     let textClass = c.textDark ? 'text-dark' : '';
     box.innerHTML = `
       <div class="characterImageContainer ${textClass}">
-        <img class="char-portrait" src="${CDN_BASE}${c.cdn}.png" alt="${c.name}" loading="lazy">
+        <img class="char-portrait" src="${CDN_BASE}${c.cdn}.png" alt="${c.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="char-img-fallback" style="display:none">${c.name.charAt(0)}</div>
         <div class="grid-percRange" id="perc-${c.id}">-</div>
         <div class="grid-weight">${c.weight}</div>
         <div class="characterName">${c.name}</div>
@@ -31,6 +58,9 @@ function renderGrid() {
       <div class="characterTitleBar">${c.name}</div>
     `;
     box.addEventListener('click', () => openCharacter(c));
+    box.setAttribute('tabindex', '0');
+    box.setAttribute('role', 'button');
+    box.setAttribute('aria-label', c.name + ', weight ' + c.weight);
     list.appendChild(box);
   });
   updateGridPercents();
@@ -81,11 +111,15 @@ function openCharacter(c) {
   let diff = computeDifficulty(ledgePerc, centerPerc);
 
   let header = document.getElementById('modal-header');
-  header.style.background = `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${CDN_BASE}${c.cdn}.png) center/cover no-repeat, ${c.bg}`;
-  header.classList.remove('text-dark');
+  header.style.background = c.bg;
+  header.style.backgroundSize = 'auto';
+
+  document.getElementById('modal-thumb').src = `${CDN_BASE_PICT}${c.cdn}.png`;
+  document.getElementById('modal-thumb').alt = c.name;
 
   document.getElementById('modal-name').textContent = c.name;
-  document.getElementById('modal-name').classList.remove('text-dark');
+  let nameEl = document.getElementById('modal-name');
+  nameEl.className = 'char-name' + (c.textDark ? ' text-dark' : '');
 
   document.getElementById('modal-weight').textContent = c.weight;
   document.getElementById('modal-fallspeed').textContent = c.fallspeed.toFixed(3);
@@ -112,13 +146,22 @@ function openCharacter(c) {
   modal.classList.add('active');
   underlay.classList.add('active');
   document.body.classList.add('no-scroll');
+  modal.setAttribute('aria-hidden', 'false');
+  underlay.setAttribute('aria-hidden', 'false');
+  trapFocus(modal);
+  document.getElementById('modal-close').focus();
 }
 
 function closeModal() {
   selectedChar = null;
-  document.getElementById('modal').classList.remove('active');
-  document.getElementById('underlay').classList.remove('active');
+  let modal = document.getElementById('modal');
+  let underlay = document.getElementById('underlay');
+  modal.classList.remove('active');
+  underlay.classList.remove('active');
   document.body.classList.remove('no-scroll');
+  modal.setAttribute('aria-hidden', 'true');
+  underlay.setAttribute('aria-hidden', 'true');
+  releaseFocus();
   renderGrid();
 }
 
@@ -139,20 +182,123 @@ function navigateChar(dir) {
   if (newIdx >= 0 && newIdx < chars.length) openCharacter(chars[newIdx]);
 }
 
+function trapFocus(container) {
+  let focusable = container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  focusableElements = Array.from(focusable);
+  lastFocusedEl = document.activeElement;
+  function handler(e) {
+    if (e.key === 'Tab') {
+      let first = focusableElements[0];
+      let last = focusableElements[focusableElements.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+  container._trapHandler = handler;
+  document.addEventListener('keydown', handler);
+}
+
+function releaseFocus() {
+  ['modal', 'faq-modal'].forEach(id => {
+    let el = document.getElementById(id);
+    if (el && el._trapHandler) {
+      document.removeEventListener('keydown', el._trapHandler);
+      el._trapHandler = null;
+    }
+  });
+  if (lastFocusedEl) lastFocusedEl.focus();
+}
+
+function applyTheme() {
+  let saved = localStorage.getItem('bw-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('theme-toggle').textContent = saved === 'dark' ? '\u263E' : '\u2600';
+}
+
+function toggleTheme() {
+  let current = document.documentElement.getAttribute('data-theme');
+  let next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('bw-theme', next);
+  document.getElementById('theme-toggle').textContent = next === 'dark' ? '\u263E' : '\u2600';
+  showToast(next === 'dark' ? 'Dark mode' : 'Light mode');
+}
+
+function openFAQ() {
+  let modal = document.getElementById('faq-modal');
+  let underlay = document.getElementById('underlay');
+  modal.classList.add('active');
+  underlay.classList.add('active');
+  document.body.classList.add('no-scroll');
+  modal.setAttribute('aria-hidden', 'false');
+  underlay.setAttribute('aria-hidden', 'false');
+  trapFocus(modal);
+  document.getElementById('faq-close').focus();
+}
+
+function closeFAQ() {
+  let modal = document.getElementById('faq-modal');
+  let underlay = document.getElementById('underlay');
+  modal.classList.remove('active');
+  underlay.classList.remove('active');
+  document.body.classList.remove('no-scroll');
+  modal.setAttribute('aria-hidden', 'true');
+  underlay.setAttribute('aria-hidden', 'true');
+  releaseFocus();
+}
+
+function toggleAccordion(btn) {
+  let panel = btn.nextElementSibling;
+  let isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.accordion-panel.open, .accordion-btn.open').forEach(el => {
+    el.classList.remove('open');
+    if (el.classList.contains('accordion-btn')) el.setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    panel.classList.add('open');
+    btn.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
 function setupEventListeners() {
-  document.getElementById('underlay').addEventListener('click', closeModal);
+  document.getElementById('underlay').addEventListener('click', () => {
+    if (document.getElementById('modal').classList.contains('active')) closeModal();
+    if (document.getElementById('faq-modal').classList.contains('active')) closeFAQ();
+  });
+
+  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+  document.getElementById('faq-toggle').addEventListener('click', openFAQ);
+  document.getElementById('faq-close').addEventListener('click', closeFAQ);
+
   document.getElementById('modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
+  });
+  document.getElementById('faq-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeFAQ();
   });
   document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('prev-char').addEventListener('click', () => navigateChar(-1));
   document.getElementById('next-char').addEventListener('click', () => navigateChar(1));
 
+  document.querySelectorAll('.accordion-btn').forEach(btn => {
+    btn.addEventListener('click', function() { toggleAccordion(this); });
+  });
+
+  let debouncedSearch = debounce(function() {
+    renderGrid();
+  }, 150);
+
   document.getElementById('search').addEventListener('input', e => {
     searchQuery = e.target.value;
     let box = document.getElementById('search-box');
     if (searchQuery) box.classList.add('active'); else box.classList.remove('active');
-    renderGrid();
+    debouncedSearch();
   });
   document.getElementById('search-clear').addEventListener('click', () => {
     document.getElementById('search').value = '';
@@ -217,11 +363,22 @@ function setupEventListeners() {
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && selectedChar) closeModal();
+    if (e.key === 'Escape' && document.getElementById('faq-modal').classList.contains('active')) closeFAQ();
     if (e.key === 'ArrowLeft' && selectedChar) navigateChar(-1);
     if (e.key === 'ArrowRight' && selectedChar) navigateChar(1);
   });
 
   document.getElementById('sidebar-toggle').addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  document.querySelectorAll('.rage-btn, .di-btn, .stage-sel-btn').forEach(btn => {
+    if (btn.classList.contains('active')) btn.setAttribute('aria-pressed', 'true');
+    btn.addEventListener('click', function() {
+      let group = this.closest('.btn-row') || this.parentElement;
+      group.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+      this.setAttribute('aria-pressed', 'true');
+    });
+    btn.setAttribute('role', 'button');
   });
 }

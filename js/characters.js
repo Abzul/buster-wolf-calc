@@ -1,4 +1,5 @@
 const CDN_BASE = 'https://www.smashbros.com/assets_v2/img/fighter/thumb_a/';
+const CDN_BASE_PICT = 'https://www.smashbros.com/assets_v2/img/fighter/pict/';
 
 const CHARACTERS = [
   { id:0,  name:"Bowser",          weight:135, fallspeed:1.77, gravity:0.125, bg:"#32765c", cdn:"koopa" },
