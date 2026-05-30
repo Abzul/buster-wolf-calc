@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Buster Wolf % Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:'Roboto',Arial,sans-serif;background:#1a1a2e;color:#fff;-webkit-font-smoothing:antialiased;min-height:100vh}
+body.no-scroll{overflow:hidden}
+
+header{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(135deg,#0d0d2b,#1a1a4e);height:56px;display:flex;align-items:center;padding:0 12px;border-bottom:2px solid #ffd700;box-shadow:0 2px 12px rgba(255,215,0,0.15)}
+header .logo{display:flex;align-items:center;gap:10px;flex:1}
+header .logo h1{font-size:18px;font-weight:900;margin:0;color:#ffd700;text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 10px rgba(255,215,0,0.3)}
+header .logo span{font-size:12px;color:#aaa;letter-spacing:2px;text-transform:uppercase;display:none}
+@media(min-width:600px){header .logo span{display:inline}}
+
+.header-controls{display:flex;align-items:center;gap:6px}
+
+#sidebar-toggle{background:none;border:none;color:#ffd700;font-size:24px;cursor:pointer;padding:8px;display:flex;align-items:center;margin-right:4px}
+#sidebar-toggle:hover{color:#fff}
+
+#sidebar{position:fixed;top:56px;left:-260px;bottom:0;width:260px;z-index:19;background:#0d0d2b;border-right:1px solid #ffd70033;transition:left 0.25s ease;overflow-y:auto;padding:12px}
+#sidebar.open{left:0}
+
+.filter-group{margin-bottom:14px}
+.filter-group label{display:block;font-size:11px;font-weight:700;color:#ffd700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.btn-row{display:flex;flex-wrap:wrap;gap:4px}
+.btn-row button{flex:1;min-width:38px;padding:6px 4px;font-size:11px;font-weight:700;border:1px solid #ffd70044;background:transparent;color:#ccc;border-radius:4px;cursor:pointer;transition:all 0.15s;text-align:center}
+.btn-row button:hover{border-color:#ffd700;color:#fff}
+.btn-row button.active{background:#ffd700;color:#1a1a2e;border-color:#ffd700;font-weight:900}
+.btn-row .sort-option{flex:1;display:flex;align-items:center;justify-content:center;gap:2px}
+
+#main{margin-top:56px;padding:8px}
+
+.search-box{position:relative;max-width:400px}
+.search-box input{width:100%;padding:8px 32px 8px 10px;background:#0d0d2b;border:1px solid #ffd70044;border-radius:4px;color:#fff;font-size:14px;outline:none}
+.search-box input:focus{border-color:#ffd700}
+.search-box input::placeholder{color:#666}
+.search-box .clear-btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:#666;cursor:pointer;font-size:16px;display:none}
+.search-box.active .clear-btn{display:block}
+
+#character-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;max-width:1400px;margin:0 auto;padding:8px 0}
+@media(min-width:600px){#character-list{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}}
+@media(min-width:1024px){#character-list{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}}
+
+.character-box{border-radius:6px;overflow:hidden;cursor:pointer;position:relative;height:100px;transition:transform 0.15s,box-shadow 0.15s;display:flex;align-items:flex-end;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.character-box .char-portrait{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.5;pointer-events:none}
+.character-box .characterImageContainer{position:absolute;inset:0}
+.character-box:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(255,215,0,0.2)}
+.character-box .characterName{display:none}
+.characterTitleBar{width:100%;background:linear-gradient(transparent,rgba(0,0,0,0.85));padding:20px 8px 6px;font-size:12px;font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.8)}
+.grid-percRange{position:absolute;top:6px;right:6px;background:#e03838;color:#fff;padding:1px 6px;border-radius:3px;font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,0.3)}
+.grid-weight{position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.5);color:#fff;padding:1px 6px;border-radius:3px;font-size:12px;font-weight:700}
+
+#underlay{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,0.7);opacity:0;pointer-events:none;transition:opacity 0.25s}
+#underlay.active{opacity:1;pointer-events:auto}
+
+#modal{position:fixed;z-index:31;top:56px;left:0;right:0;bottom:0;transform:translateY(110%);transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);overflow-y:auto}
+#modal.active{transform:translateY(0)}
+
+.modal-inner{max-width:600px;margin:0 auto 20px;background:#16163a;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.5);border:1px solid #ffd70033;border-top:none}
+
+.modal-header{position:relative;padding:24px 20px 16px;min-height:100px;display:flex;flex-direction:column;justify-content:flex-end}
+.modal-header .char-name{font-size:28px;font-weight:900;margin:0;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
+.modal-header .char-name.text-dark{color:#333}
+.modal-header .char-name:not(.text-dark){color:#fff}
+.modal-header .back-btn{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.3);border:none;color:#fff;font-size:22px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s}
+.modal-header .back-btn:hover{background:rgba(0,0,0,0.6)}
+.modal-header .nav-arrows{position:absolute;top:12px;right:12px;display:flex;gap:4px}
+.modal-header .nav-arrows button{background:rgba(0,0,0,0.3);border:none;color:#fff;font-size:18px;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s}
+.modal-header .nav-arrows button:hover{background:rgba(0,0,0,0.6)}
+
+.modal-body{padding:16px 20px}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:#0d0d2b;border-radius:8px;padding:10px 8px;text-align:center}
+.stat-card .stat-val{font-size:20px;font-weight:900;color:#ffd700}
+.stat-card .stat-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.kill-section{margin-bottom:16px}
+.kill-section h3{font-size:13px;font-weight:700;color:#ffd700;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px}
+.kill-boxes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kill-box{background:#0d0d2b;border-radius:8px;padding:12px;text-align:center}
+.kill-box .kill-val{font-size:28px;font-weight:900;color:#ff4444}
+.kill-box .kill-val.good{color:#4CAF50}
+.kill-box .kill-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.diff-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:700;text-transform:uppercase}
+.very-hard{background:#E65100;color:#fff}
+.hard{background:#FF9800;color:#fff}
+.average{background:#FFEB3B;color:#333}
+.easy{background:#4CAF50;color:#fff}
+.very-easy{background:#8BC34A;color:#fff}
+
+.stages-table{width:100%;border-collapse:collapse;font-size:13px}
+.stages-table th{text-align:left;padding:6px 8px;color:#ffd700;font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #ffd70022}
+.stages-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.stages-table tr:last-child td{border-bottom:none}
+.stages-table .stg{font-weight:700}
+.stages-table .ctr{color:#ff6b6b;font-weight:700}
+.stages-table .ldg{color:#69db7c;font-weight:700}
+.stages-table .diff-span{display:block;font-size:10px;color:#888}
+
+.sticky-settings{position:sticky;top:0;z-index:5;background:#0d0d2b;padding:10px 20px;border-bottom:1px solid #ffd70022}
+.sticky-settings .settings-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sticky-settings .settings-row label{font-size:10px;color:#ffd700;text-transform:uppercase;font-weight:700;margin-right:4px}
+
+.notification{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:100;background:#ffd700;color:#1a1a2e;padding:10px 20px;border-radius:8px;font-weight:700;font-size:14px;box-shadow:0 4px 20px rgba(255,215,0,0.3);display:none}
+
+@media(max-width:480px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .kill-boxes{grid-template-columns:1fr}
+  #character-list{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  .character-box{height:80px}
+  .characterTitleBar{font-size:10px;padding:14px 6px 4px}
+  .modal-inner{border-radius:0}
+}
+</style>
+</head>
+<body>
+<header>
+  <button id="sidebar-toggle" aria-label="Menu">&#9776;</button>
+  <div class="logo">
+    <h1>BUSTER WOLF %</h1>
+    <span>Terry Bogard · SSBU</span>
+  </div>
+  <div class="header-controls"></div>
+</header>
+
+<div id="sidebar">
+  <div class="filter-group">
+    <label>Rage (Terry %)</label>
+    <div class="btn-row" id="rage-group">
+      <button class="rage-btn" data-rage="0">0%</button>
+      <button class="rage-btn" data-rage="1">50%</button>
+      <button class="rage-btn" data-rage="2">60%</button>
+      <button class="rage-btn" data-rage="3">80%</button>
+      <button class="rage-btn active" data-rage="4">100%</button>
+      <button class="rage-btn" data-rage="5">125%</button>
+      <button class="rage-btn" data-rage="6">150%</button>
+    </div>
+  </div>
+  <div class="filter-group">
+    <label>DI</label>
+    <div class="btn-row">
+      <button class="di-btn active" data-di="none">No DI</button>
+      <button class="di-btn" data-di="optimal">Optimal DI</button>
+    </div>
+  </div>
+  <div class="filter-group">
+    <label>Stage</label>
+    <div class="btn-row" id="stage-group">
+      <button class="stage-sel-btn active" data-stage="fd">FD</button>
+      <button class="stage-sel-btn" data-stage="bf">BF</button>
+      <button class="stage-sel-btn" data-stage="sv">SV</button>
+      <button class="stage-sel-btn" data-stage="tc">TC</button>
+      <button class="stage-sel-btn" data-stage="ps2">PS2</button>
+      <button class="stage-sel-btn" data-stage="kpl">KPL</button>
+      <button class="stage-sel-btn" data-stage="hb">HB</button>
+      <button class="stage-sel-btn" data-stage="ya">YA</button>
+    </div>
+  </div>
+  <div class="filter-group">
+    <label>Search</label>
+    <div class="search-box" id="search-box">
+      <input type="text" id="search" placeholder="Character name...">
+      <button class="clear-btn" id="search-clear">&times;</button>
+    </div>
+  </div>
+  <div class="filter-group" style="margin-top:10px">
+    <div class="btn-row" id="sort-options">
+      <button class="sort-option active" data-sort="name">Name<span class="sort-arrow"> ▲</span></button>
+      <button class="sort-option" data-sort="weight">Weight<span class="sort-arrow"></span></button>
+      <button class="sort-option" data-sort="fallspeed">Fallspeed<span class="sort-arrow"></span></button>
+    </div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="character-list"></div>
+</div>
+
+<div id="underlay"></div>
+
+<div id="modal">
+  <div class="modal-inner">
+    <div class="modal-header" id="modal-header">
+      <button class="back-btn" id="modal-close">&#x2190;</button>
+      <div class="nav-arrows">
+        <button id="prev-char" onclick="prevChar()">&#x276E;</button>
+        <button id="next-char" onclick="nextChar()">&#x276F;</button>
+      </div>
+      <h2 class="char-name" id="modal-name"></h2>
+    </div>
+    <div class="sticky-settings">
+      <div class="settings-row">
+        <label>Rage:</label>
+        <div class="btn-row" style="flex:1;gap:3px">
+          <button class="rage-btn" data-rage="0">0</button>
+          <button class="rage-btn" data-rage="1">50</button>
+          <button class="rage-btn" data-rage="2">60</button>
+          <button class="rage-btn" data-rage="3">80</button>
+          <button class="rage-btn active" data-rage="4">100</button>
+          <button class="rage-btn" data-rage="5">125</button>
+          <button class="rage-btn" data-rage="6">150</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-val" id="modal-weight"></div>
+          <div class="stat-label">Weight</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="modal-fallspeed"></div>
+          <div class="stat-label">Fallspeed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="modal-gravity"></div>
+          <div class="stat-label">Gravity</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val"><span id="modal-difficulty"></span></div>
+          <div class="stat-label">Difficulty</div>
+        </div>
+      </div>
+
+      <div class="kill-section">
+        <h3>Kill Percents</h3>
+        <div class="kill-boxes">
+          <div class="kill-box">
+            <div class="kill-val" id="modal-center"></div>
+            <div class="kill-label">Center Stage</div>
+          </div>
+          <div class="kill-box">
+            <div class="kill-val good" id="modal-ledge"></div>
+            <div class="kill-label">At Ledge</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kill-section">
+        <h3>All Stages</h3>
+        <div id="modal-stages"></div>
+      </div>
+
+      <div class="kill-section" style="margin-top:12px;padding:10px;background:#0d0d2b;border-radius:8px;font-size:12px;color:#aaa">
+        <strong style="color:#ffd700">Kill confirms:</strong><br>
+        Dtilt → Buster Wolf (true ~60-90% depending on weight)<br>
+        Ftilt → Buster Wolf (pre-tumble, DI-dependent)<br>
+        Jab1+Jab2 → Buster Wolf<br>
+        <span style="display:block;margin-top:4px;font-size:11px;color:#666">Buster Wolf only available when Terry is at 100%+ (GO! meter active)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notification" id="notification"></div>
+
+<script src="js/characters.js"></script>
+<script src="js/formula.js"></script>
+<script src="js/app.js"></script>
+<script>
+init();
+
+function prevChar() {
+  if (!selectedChar) return;
+  let chars = getFilteredAndSortedChars();
+  let idx = chars.findIndex(c => c.id === selectedChar.id);
+  if (idx > 0) openCharacter(chars[idx - 1]);
+}
+function nextChar() {
+  if (!selectedChar) return;
+  let chars = getFilteredAndSortedChars();
+  let idx = chars.findIndex(c => c.id === selectedChar.id);
+  if (idx < chars.length - 1) openCharacter(chars[idx + 1]);
+}
+
+document.getElementById('search').addEventListener('input', function() {
+  let box = document.getElementById('search-box');
+  if (this.value) box.classList.add('active');
+  else box.classList.remove('active');
+});
+document.getElementById('search-clear').addEventListener('click', function() {
+  document.getElementById('search').value = '';
+  document.getElementById('search').dispatchEvent(new Event('input'));
+});
+</script>
+</body>
+</html>
