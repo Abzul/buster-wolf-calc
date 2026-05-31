@@ -56,32 +56,32 @@ Data and formula extracted from [rubendal/SSBU-Calculator](https://github.com/ru
 
 [https://abzul.github.io/buster-wolf-calc/](https://abzul.github.io/buster-wolf-calc/)
 
-## v1.1.0 — Changelog
+## v1.0.2 — Changelog
 
-- **HUD Minimalism** — header más compacto (sin subtítulo), cards más limpias
-- **Badge %** — fondo oscuro semisólido + texto blanco + borde colored, siempre legible
-- **Title bar** — sin degradado visible, solo text-shadow fuerte sobre el portrait
-- **Duck Hunt portrait** — corregido `object-position` para mostrar al perro correctamente
-- **Sidebar pills** — botones tipo pill (border-radius 20px), hover con background accent
-- **Transiciones suaves** — todas las animaciones a 0.25-0.35s con cubic-bezier
-- **Modal stats** — iconos unicode, menos padding, valores en Oswald 22px
+- **HUD Minimalism** — compact header (no subtitle), cleaner character cards
+- **Percent badge** — dark semisolid background, white text, colored border; always readable
+- **Title bar** — no visible gradient, heavy text-shadow only, sits over portrait
+- **Duck Hunt portrait** — fixed `object-position` to properly show the dog
+- **Sidebar pills** — pill-shaped buttons (border-radius 20px), hover background accent
+- **Smooth transitions** — all animations bumped to 0.25-0.35s with cubic-bezier
+- **Modal stats** — unicode icons, tighter padding, Oswald 22px values
 - **Kill percent** — arcade-style 36px Oswald
-- **Animación fadeIn** — al cargar los personajes en la grilla
-- **Highlight de personaje seleccionado** — borde colored + glow en la card activa
-- **Slide animation** — al navegar entre personajes con flechas
-- **OG Image** — preview visual con Terry al compartir en redes
-- **Rage buttons responsive** — más compactos en mobile
+- **Fade-in animation** — cards animate in on grid load
+- **Selected character highlight** — colored border + glow on active card
+- **Slide animation** — when navigating between characters with arrow keys
+- **OG Image** — Terry visual preview when sharing on social media
+- **Responsive rage buttons** — more compact layout on mobile
 
 ## v1.0.1 — Changelog
 
-- **Dark/Light mode** — toggle ☾/☀ con persistencia en localStorage
-- **FAQ / About** — modal con acordeón explicando Buster Wolf, fórmula, rage, DI, blast zones, kill confirms y el origen de "Are you OK?"
-- **Modal header redesign** — color sólido del personaje + spray thumbnail al lado del nombre
-- **Favicon** — spray de Terry en el tab del navegador
-- **Accessibility** — skip to content, focus trap en modals, ARIA labels/pressed, roles
-- **Search debounce** — 150ms para evitar re-renders innecesarios
-- **Empty state** — mensaje cuando no hay resultados de búsqueda
-- **Image fallback** — inicial del personaje si la CDN falla
-- **Social links** — X y Discord en sidebar + créditos
-- **Responsive** — sidebar full-width en mobile
-- **Meta tags OG** — preview en redes sociales
+- **Dark/Light mode** — toggle ☾/☀ with localStorage persistence
+- **FAQ / About** — accordion modal explaining Buster Wolf, formula, rage, DI, blast zones, kill confirms, and the "Are you OK?" origin
+- **Modal header redesign** — solid character color background + spray thumbnail by the name
+- **Favicon** — Terry spray in the browser tab
+- **Accessibility** — skip to content, focus trap in modals, ARIA labels/pressed, roles
+- **Search debounce** — 150ms to avoid unnecessary re-renders
+- **Empty state** — message when no search results found
+- **Image fallback** — character first letter if CDN fails
+- **Social links** — X and Discord in sidebar + credits
+- **Responsive** — sidebar full-width on mobile
+- **OG meta tags** — social preview
