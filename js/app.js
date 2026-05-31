@@ -171,7 +171,7 @@ function closeModal() {
   modal.setAttribute('aria-hidden', 'true');
   underlay.setAttribute('aria-hidden', 'true');
   releaseFocus();
-  renderGrid();
+  updateGridPercents();
 }
 
 function computeDifficulty(minP, maxP) {
