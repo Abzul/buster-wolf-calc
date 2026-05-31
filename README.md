@@ -71,6 +71,7 @@ Data and formula extracted from [rubendal/SSBU-Calculator](https://github.com/ru
 - **Slide animation** — when navigating between characters with arrow keys
 - **OG Image** — Terry visual preview when sharing on social media
 - **Responsive rage buttons** — more compact layout on mobile
+- **Flicker-free navigation** — no DOM recreation on open/close/navigate; only text updates
 
 ## v1.0.1 — Changelog
 
