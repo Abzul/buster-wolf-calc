@@ -39,14 +39,14 @@ function findKillPercent(weight, kbThreshold, rage, diFactor) {
 }
 
 const STAGES = {
-  fd:  { name: "Final Destination",      label: "FD",  centerKB: CENTER_KB_THRESHOLD, ledgeKB: LEDGE_KB_THRESHOLD },
-  bf:  { name: "Battlefield",            label: "BF",  centerKB: CENTER_KB_THRESHOLD - 2, ledgeKB: LEDGE_KB_THRESHOLD - 1 },
-  sv:  { name: "Smashville",             label: "SV",  centerKB: CENTER_KB_THRESHOLD + 1, ledgeKB: LEDGE_KB_THRESHOLD },
-  tc:  { name: "Town & City",            label: "TC",  centerKB: CENTER_KB_THRESHOLD + 2, ledgeKB: LEDGE_KB_THRESHOLD + 1 },
-  ps2: { name: "Pokemon Stadium 2",      label: "PS2", centerKB: CENTER_KB_THRESHOLD - 1, ledgeKB: LEDGE_KB_THRESHOLD },
-  kpl: { name: "Kalos Pokemon League",   label: "KPL", centerKB: CENTER_KB_THRESHOLD - 3, ledgeKB: LEDGE_KB_THRESHOLD - 2 },
-  hb:  { name: "Hollow Bastion",         label: "HB",  centerKB: CENTER_KB_THRESHOLD, ledgeKB: LEDGE_KB_THRESHOLD },
-  ya:  { name: "Yggdrasil's Altar",      label: "YA",  centerKB: CENTER_KB_THRESHOLD - 1, ledgeKB: LEDGE_KB_THRESHOLD - 1 }
+  fd:  { name: "Final Destination",      label: "Final Dest.", centerKB: CENTER_KB_THRESHOLD, ledgeKB: LEDGE_KB_THRESHOLD },
+  bf:  { name: "Battlefield",            label: "Battlefield", centerKB: CENTER_KB_THRESHOLD - 2, ledgeKB: LEDGE_KB_THRESHOLD - 1 },
+  sv:  { name: "Smashville",             label: "Smashville",  centerKB: CENTER_KB_THRESHOLD + 1, ledgeKB: LEDGE_KB_THRESHOLD },
+  tc:  { name: "Town & City",            label: "Town & City", centerKB: CENTER_KB_THRESHOLD + 2, ledgeKB: LEDGE_KB_THRESHOLD + 1 },
+  ps2: { name: "Pokemon Stadium 2",      label: "Pokémon Stad.", centerKB: CENTER_KB_THRESHOLD - 1, ledgeKB: LEDGE_KB_THRESHOLD },
+  kpl: { name: "Kalos Pokemon League",   label: "Kalos League", centerKB: CENTER_KB_THRESHOLD - 3, ledgeKB: LEDGE_KB_THRESHOLD - 2 },
+  hb:  { name: "Hollow Bastion",         label: "Hollow Bastion", centerKB: CENTER_KB_THRESHOLD, ledgeKB: LEDGE_KB_THRESHOLD },
+  ya:  { name: "Yggdrasil's Altar",      label: "Yggdrasil",    centerKB: CENTER_KB_THRESHOLD - 1, ledgeKB: LEDGE_KB_THRESHOLD - 1 }
 };
 
 const RAGE_LEVELS = [
