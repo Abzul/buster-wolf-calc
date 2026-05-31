@@ -72,7 +72,7 @@ const CHARACTERS = [
   { id:67, name:"Isabelle",       weight:88,  fallspeed:1.30, gravity:0.071, bg:"#FFB6C1", cdn:"shizue" },
   { id:68, name:"Little Mac",     weight:87,  fallspeed:1.95, gravity:0.09,  bg:"#39775a", cdn:"little_mac" },
   { id:69, name:"Sonic",          weight:86,  fallspeed:1.65, gravity:0.09,  bg:"#579DF2", cdn:"sonic" },
-  { id:70, name:"Duck Hunt",      weight:86,  fallspeed:1.65, gravity:0.076, bg:"#935a33", cdn:"duck_hunt" },
+  { id:70, name:"Duck Hunt",      weight:86,  fallspeed:1.65, gravity:0.076, bg:"#935a33", cdn:"duck_hunt", portraitPos:"center 104%" },
   { id:71, name:"Zelda",          weight:85,  fallspeed:1.35, gravity:0.071, bg:"#AA74BA", cdn:"zelda" },
   { id:72, name:"Sora",           weight:85,  fallspeed:1.44, gravity:0.064, bg:"#FF6347", cdn:"sora" },
   { id:73, name:"Falco",          weight:82,  fallspeed:1.80, gravity:0.13,  bg:"#52b1e3", cdn:"falco" },

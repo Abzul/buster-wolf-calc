@@ -47,12 +47,12 @@ function renderGrid() {
     box.dataset.name = c.name.toLowerCase();
     box.style.backgroundColor = c.bg;
     let textClass = c.textDark ? 'text-dark' : '';
+    let pos = c.portraitPos || 'center';
     box.innerHTML = `
       <div class="characterImageContainer ${textClass}">
-        <img class="char-portrait" src="${CDN_BASE}${c.cdn}.png" alt="${c.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <img class="char-portrait" src="${CDN_BASE}${c.cdn}.png" alt="${c.name}" loading="lazy" style="object-position:${pos}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="char-img-fallback" style="display:none">${c.name.charAt(0)}</div>
         <div class="grid-percRange" id="perc-${c.id}">-</div>
-        <div class="grid-weight">${c.weight}</div>
         <div class="characterName">${c.name}</div>
       </div>
       <div class="characterTitleBar">${c.name}</div>
@@ -101,6 +101,9 @@ function openCharacter(c) {
   selectedChar = c;
   document.getElementById('sidebar').classList.remove('open');
   renderGrid();
+  document.querySelectorAll('.character-box').forEach(b => b.classList.remove('selected'));
+  let box = document.querySelector(`.character-box[data-name="${c.name.toLowerCase()}"]`);
+  if (box) box.classList.add('selected');
 
   let modal = document.getElementById('modal');
   let underlay = document.getElementById('underlay');
@@ -154,6 +157,7 @@ function openCharacter(c) {
 
 function closeModal() {
   selectedChar = null;
+  document.querySelectorAll('.character-box').forEach(b => b.classList.remove('selected'));
   let modal = document.getElementById('modal');
   let underlay = document.getElementById('underlay');
   modal.classList.remove('active');
@@ -179,7 +183,14 @@ function navigateChar(dir) {
   let chars = getFilteredAndSortedChars();
   let idx = chars.findIndex(c => c.id === selectedChar.id);
   let newIdx = idx + dir;
-  if (newIdx >= 0 && newIdx < chars.length) openCharacter(chars[newIdx]);
+  if (newIdx >= 0 && newIdx < chars.length) {
+    let body = document.querySelector('.modal-body');
+    body.classList.add('slide-out');
+    setTimeout(() => {
+      openCharacter(chars[newIdx]);
+      body.classList.remove('slide-out');
+    }, 80);
+  }
 }
 
 function trapFocus(container) {

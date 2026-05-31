@@ -56,6 +56,22 @@ Data and formula extracted from [rubendal/SSBU-Calculator](https://github.com/ru
 
 [https://abzul.github.io/buster-wolf-calc/](https://abzul.github.io/buster-wolf-calc/)
 
+## v1.1.0 — Changelog
+
+- **HUD Minimalism** — header más compacto (sin subtítulo), cards más limpias
+- **Badge %** — fondo oscuro semisólido + texto blanco + borde colored, siempre legible
+- **Title bar** — sin degradado visible, solo text-shadow fuerte sobre el portrait
+- **Duck Hunt portrait** — corregido `object-position` para mostrar al perro correctamente
+- **Sidebar pills** — botones tipo pill (border-radius 20px), hover con background accent
+- **Transiciones suaves** — todas las animaciones a 0.25-0.35s con cubic-bezier
+- **Modal stats** — iconos unicode, menos padding, valores en Oswald 22px
+- **Kill percent** — arcade-style 36px Oswald
+- **Animación fadeIn** — al cargar los personajes en la grilla
+- **Highlight de personaje seleccionado** — borde colored + glow en la card activa
+- **Slide animation** — al navegar entre personajes con flechas
+- **OG Image** — preview visual con Terry al compartir en redes
+- **Rage buttons responsive** — más compactos en mobile
+
 ## v1.0.1 — Changelog
 
 - **Dark/Light mode** — toggle ☾/☀ con persistencia en localStorage
