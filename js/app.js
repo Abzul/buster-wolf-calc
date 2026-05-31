@@ -139,7 +139,7 @@ function updateModalContent(c) {
 function openCharacter(c) {
   selectedChar = c;
   document.getElementById('sidebar').classList.remove('open');
-  renderGrid();
+  updateGridPercents();
   setSelectedChar(c);
   updateModalContent(c);
 
