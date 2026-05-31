@@ -97,31 +97,20 @@ function getFilteredAndSortedChars() {
   return chars;
 }
 
-function openCharacter(c) {
-  selectedChar = c;
-  document.getElementById('sidebar').classList.remove('open');
-  renderGrid();
-  document.querySelectorAll('.character-box').forEach(b => b.classList.remove('selected'));
-  let box = document.querySelector(`.character-box[data-name="${c.name.toLowerCase()}"]`);
-  if (box) box.classList.add('selected');
-
-  let modal = document.getElementById('modal');
-  let underlay = document.getElementById('underlay');
+function updateModalContent(c) {
   let stage = STAGES[selectedStage];
-
   let centerPerc = findKillPercent(c.weight, stage.centerKB, selectedRage.mult, DI_FACTORS[selectedDI]);
   let ledgePerc = findKillPercent(c.weight, stage.ledgeKB, selectedRage.mult, DI_FACTORS[selectedDI]);
   let diff = computeDifficulty(ledgePerc, centerPerc);
 
   let header = document.getElementById('modal-header');
   header.style.background = c.bg;
-  header.style.backgroundSize = 'auto';
 
   document.getElementById('modal-thumb').src = `${CDN_BASE_PICT}${c.cdn}.png`;
   document.getElementById('modal-thumb').alt = c.name;
 
-  document.getElementById('modal-name').textContent = c.name;
   let nameEl = document.getElementById('modal-name');
+  nameEl.textContent = c.name;
   nameEl.className = 'char-name' + (c.textDark ? ' text-dark' : '');
 
   document.getElementById('modal-weight').textContent = c.weight;
@@ -145,7 +134,17 @@ function openCharacter(c) {
   }
   html += '</tbody></table>';
   stagesContainer.innerHTML = html;
+}
 
+function openCharacter(c) {
+  selectedChar = c;
+  document.getElementById('sidebar').classList.remove('open');
+  renderGrid();
+  setSelectedChar(c);
+  updateModalContent(c);
+
+  let modal = document.getElementById('modal');
+  let underlay = document.getElementById('underlay');
   modal.classList.add('active');
   underlay.classList.add('active');
   document.body.classList.add('no-scroll');
@@ -153,6 +152,12 @@ function openCharacter(c) {
   underlay.setAttribute('aria-hidden', 'false');
   trapFocus(modal);
   document.getElementById('modal-close').focus();
+}
+
+function setSelectedChar(c) {
+  document.querySelectorAll('.character-box').forEach(b => b.classList.remove('selected'));
+  let box = document.querySelector(`.character-box[data-name="${c.name.toLowerCase()}"]`);
+  if (box) box.classList.add('selected');
 }
 
 function closeModal() {
@@ -187,7 +192,10 @@ function navigateChar(dir) {
     let body = document.querySelector('.modal-body');
     body.classList.add('slide-out');
     setTimeout(() => {
-      openCharacter(chars[newIdx]);
+      selectedChar = chars[newIdx];
+      setSelectedChar(selectedChar);
+      updateGridPercents();
+      updateModalContent(selectedChar);
       body.classList.remove('slide-out');
     }, 80);
   }
@@ -329,7 +337,7 @@ function setupEventListeners() {
         else b.classList.remove('active');
       });
       selectedRage = RAGE_LEVELS[parseInt(this.dataset.rage)];
-      if (selectedChar) { let c = selectedChar; selectedChar = null; openCharacter(c); }
+      if (selectedChar) { updateModalContent(selectedChar); updateGridPercents(); }
       else updateGridPercents();
     });
   });
@@ -339,7 +347,7 @@ function setupEventListeners() {
       document.querySelectorAll('.di-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       selectedDI = this.dataset.di;
-      if (selectedChar) { let c = selectedChar; selectedChar = null; openCharacter(c); }
+      if (selectedChar) { updateModalContent(selectedChar); updateGridPercents(); }
       else updateGridPercents();
     });
   });
@@ -349,7 +357,7 @@ function setupEventListeners() {
       document.querySelectorAll('.stage-sel-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       selectedStage = this.dataset.stage;
-      if (selectedChar) { let c = selectedChar; selectedChar = null; openCharacter(c); }
+      if (selectedChar) { updateModalContent(selectedChar); updateGridPercents(); }
       else updateGridPercents();
     });
   });
@@ -367,7 +375,7 @@ function setupEventListeners() {
       this.classList.add('active');
       let arrow = this.querySelector('.sort-arrow');
       if (arrow) arrow.textContent = sortAsc ? ' ▲' : ' ▼';
-      if (selectedChar) { let c = selectedChar; selectedChar = null; openCharacter(c); }
+      if (selectedChar) { let c = selectedChar; renderGrid(); setSelectedChar(c); updateGridPercents(); }
       else renderGrid();
     });
   });
