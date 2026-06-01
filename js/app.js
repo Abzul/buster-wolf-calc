@@ -1,3 +1,4 @@
+let selectedMove = 'bw';
 let selectedChar = null;
 let selectedRage = RAGE_LEVELS[0];
 let selectedDI = 'none';
@@ -7,6 +8,10 @@ let sortAsc = true;
 let searchQuery = '';
 let focusableElements = [];
 let lastFocusedEl = null;
+
+function getMove() { return selectedMove === 'pg' ? POWER_GEYSER : BUSTER_WOLF; }
+function getKB(stage) { return selectedMove === 'pg' ? stage.ceilingKB : stage.centerKB; }
+function isBW() { return selectedMove === 'bw'; }
 
 function debounce(fn, ms) {
   let timer;
@@ -26,6 +31,7 @@ function showToast(msg) {
 
 function init() {
   renderGrid();
+  switchMove('bw');
   setupEventListeners();
   applyTheme();
 }
@@ -68,6 +74,8 @@ function renderGrid() {
 
 function updateGridPercents() {
   let chars = getFilteredAndSortedChars();
+  let move = getMove();
+  let kb = getKB(STAGES[selectedStage]);
   chars.forEach(c => {
     let el = document.getElementById('perc-' + c.id);
     if (!el) return;
@@ -76,7 +84,7 @@ function updateGridPercents() {
       return;
     }
 
-    let p = findKillPercent(c.weight, STAGES[selectedStage].centerKB, selectedRage.mult, DI_FACTORS[selectedDI]);
+    let p = findKillPercent(c.weight, kb, selectedRage.mult, DI_FACTORS[selectedDI], move);
     el.textContent = p + '%';
   });
 }
@@ -99,9 +107,7 @@ function getFilteredAndSortedChars() {
 
 function updateModalContent(c) {
   let stage = STAGES[selectedStage];
-  let centerPerc = findKillPercent(c.weight, stage.centerKB, selectedRage.mult, DI_FACTORS[selectedDI]);
-  let ledgePerc = findKillPercent(c.weight, stage.ledgeKB, selectedRage.mult, DI_FACTORS[selectedDI]);
-  let diff = computeDifficulty(ledgePerc, centerPerc);
+  let move = getMove();
 
   let header = document.getElementById('modal-header');
   header.style.background = c.bg;
@@ -117,23 +123,82 @@ function updateModalContent(c) {
   document.getElementById('modal-fallspeed').textContent = c.fallspeed.toFixed(3);
   document.getElementById('modal-gravity').textContent = c.gravity.toFixed(3);
 
-  document.getElementById('modal-center').textContent = centerPerc + '%';
-  document.getElementById('modal-ledge').textContent = ledgePerc + '%';
+  if (isBW()) {
+    let centerPerc = findKillPercent(c.weight, stage.centerKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+    let ledgePerc = findKillPercent(c.weight, stage.ledgeKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+    let diff = computeDifficulty(ledgePerc, centerPerc);
 
-  let diffEl = document.getElementById('modal-difficulty');
-  diffEl.textContent = diff.label;
-  diffEl.className = 'diff-badge ' + diff.class;
+    document.getElementById('modal-center').textContent = centerPerc + '%';
+    document.getElementById('modal-ledge').textContent = ledgePerc + '%';
+    document.getElementById('modal-kill-section-bw').style.display = '';
+    document.getElementById('modal-kill-section-pg').style.display = 'none';
 
-  let stagesContainer = document.getElementById('modal-stages');
-  let html = '<table class="stages-table"><thead><tr><th>Stage</th><th>Center</th><th>Ledge</th><th>Diff</th></tr></thead><tbody>';
-  for (let [key, s] of Object.entries(STAGES)) {
-    let ctr = findKillPercent(c.weight, s.centerKB, selectedRage.mult, DI_FACTORS[selectedDI]);
-    let ldg = findKillPercent(c.weight, s.ledgeKB, selectedRage.mult, DI_FACTORS[selectedDI]);
-    let d = computeDifficulty(ldg, ctr);
-    html += `<tr><td class="stg">${s.label}</td><td class="ctr">${ctr}%</td><td class="ldg">${ldg}%</td><td><span class="diff-badge ${d.class}" style="font-size:10px">${d.label}</span></td></tr>`;
+    let diffEl = document.getElementById('modal-difficulty');
+    diffEl.textContent = diff.label;
+    diffEl.className = 'diff-badge ' + diff.class;
+
+    let stagesContainer = document.getElementById('modal-stages');
+    let html = '<table class="stages-table"><thead><tr><th>Stage</th><th>Center</th><th>Ledge</th><th>Diff</th></tr></thead><tbody>';
+    for (let [key, s] of Object.entries(STAGES)) {
+      let ctr = findKillPercent(c.weight, s.centerKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+      let ldg = findKillPercent(c.weight, s.ledgeKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+      let d = computeDifficulty(ldg, ctr);
+      html += `<tr><td class="stg">${s.label}</td><td class="ctr">${ctr}%</td><td class="ldg">${ldg}%</td><td><span class="diff-badge ${d.class}" style="font-size:10px">${d.label}</span></td></tr>`;
+    }
+    html += '</tbody></table>';
+    stagesContainer.innerHTML = html;
+
+    document.getElementById('modal-confirms').innerHTML =
+      '<strong style="color:var(--accent)">Kill confirms:</strong><br>' +
+      'Dtilt \u2192 Buster Wolf (true ~60-90% depending on weight)<br>' +
+      'Ftilt \u2192 Buster Wolf (pre-tumble, DI-dependent)<br>' +
+      'Jab1+Jab2 \u2192 Buster Wolf<br>' +
+      '<span style="display:block;margin-top:4px;font-size:11px;color:var(--text4)">Buster Wolf only available when Terry is at 100%+ (GO! meter active)</span>';
+  } else {
+    let killPerc = findKillPercent(c.weight, stage.ceilingKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+
+    document.getElementById('modal-kill-pg').textContent = killPerc + '%';
+    document.getElementById('modal-kill-section-bw').style.display = 'none';
+    document.getElementById('modal-kill-section-pg').style.display = '';
+
+    let stagesContainer = document.getElementById('modal-stages');
+    let html = '<table class="stages-table"><thead><tr><th>Stage</th><th>Kill %</th></tr></thead><tbody>';
+    for (let [key, s] of Object.entries(STAGES)) {
+      let k = findKillPercent(c.weight, s.ceilingKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+      html += `<tr><td class="stg">${s.label}</td><td class="ctr">${k}%</td></tr>`;
+    }
+    html += '</tbody></table>';
+    stagesContainer.innerHTML = html;
+
+    document.getElementById('modal-confirms').innerHTML =
+      '<strong style="color:var(--accent)">Kill confirms:</strong><br>' +
+      'Dtilt \u2192 Power Geyser (DI-dependent)<br>' +
+      'Ftilt \u2192 Power Geyser (DI-dependent)<br>' +
+      'Jab1+Jab2 \u2192 Power Geyser<br>' +
+      '<span style="display:block;margin-top:4px;font-size:11px;color:var(--text4)">Power Geyser available when Terry is at 100%+ (GO! meter active)</span>';
   }
-  html += '</tbody></table>';
-  stagesContainer.innerHTML = html;
+}
+
+function switchMove(move) {
+  selectedMove = move;
+  document.documentElement.dataset.move = move;
+  document.querySelectorAll('.move-tab').forEach(t => t.classList.toggle('active', t.dataset.move === move));
+  let isPg = move === 'pg';
+  document.querySelector('.logo h1').textContent = isPg ? 'POWER GEYSER %' : 'BUSTER WOLF %';
+  document.title = isPg ? 'Power Geyser % — Kill Percents' : 'Buster Wolf % — Kill Percents';
+  document.querySelector('meta[property="og:title"]').content = isPg ? 'Power Geyser % Reference' : 'Buster Wolf % Reference';
+  let desc = isPg
+    ? 'Power Geyser kill percent calculator for Terry Bogard in Super Smash Bros. Ultimate. Calculate exact ceiling KO percents for all 88 characters across 8 stages with rage and DI settings.'
+    : 'Buster Wolf kill percent calculator for Terry Bogard in Super Smash Bros. Ultimate. Calculate exact KO percents for all 88 characters across 8 stages with rage and DI settings.';
+  let ogDesc = isPg
+    ? 'Power Geyser kill percent calculator for Terry Bogard in SSBU. Ceiling KO percents for all 88 characters, 8 stages, rage & DI settings.'
+    : 'Buster Wolf kill percent calculator for Terry Bogard in SSBU. KO percents for all 88 characters, 8 stages, rage & DI settings.';
+  document.querySelector('meta[name="description"]').content = desc;
+  document.querySelector('meta[property="og:description"]').content = ogDesc;
+  if (selectedChar) {
+    updateModalContent(selectedChar);
+  }
+  updateGridPercents();
 }
 
 function openCharacter(c) {
@@ -251,6 +316,8 @@ function toggleTheme() {
 function openFAQ() {
   let modal = document.getElementById('faq-modal');
   let underlay = document.getElementById('underlay');
+  document.getElementById('faq-accordion-bw').style.display = isBW() ? '' : 'none';
+  document.getElementById('faq-accordion-pg').style.display = isBW() ? 'none' : '';
   modal.classList.add('active');
   underlay.classList.add('active');
   document.body.classList.add('no-scroll');
@@ -389,6 +456,12 @@ function setupEventListeners() {
 
   document.getElementById('sidebar-toggle').addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  document.querySelectorAll('.move-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      if (!this.classList.contains('active')) switchMove(this.dataset.move);
+    });
   });
 
   document.querySelectorAll('.rage-btn, .di-btn, .stage-sel-btn').forEach(btn => {

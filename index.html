@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Buster Wolf % — Kill Percents</title>
-<meta name="description" content="Buster Wolf kill percent calculator for Terry Bogard in Super Smash Bros. Ultimate. Calculate exact KO percents for all 88 characters across 8 stages with rage and DI settings.">
-<meta property="og:title" content="Buster Wolf % Reference">
-<meta property="og:description" content="Buster Wolf kill percent calculator for Terry Bogard in SSBU. KO percents for all 88 characters, 8 stages, rage &amp; DI settings.">
+<meta name="description" content="Terry Bogard kill percent calculator for Super Smash Bros. Ultimate. Calculate exact KO percents for Buster Wolf and Power Geyser across all 88 characters, 8 stages, rage and DI settings.">
+<meta property="og:title" content="Terry % Reference">
+<meta property="og:description" content="Terry Bogard kill percent calculator for SSBU. KO percents for Buster Wolf and Power Geyser, all 88 characters, 8 stages, rage &amp; DI settings.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://abzul.github.io/buster-wolf-calc/">
 <meta name="twitter:card" content="summary_large_image">
@@ -18,11 +18,37 @@
 *,*::before,*::after{box-sizing:border-box}
 :root{--bg:#1a1a2e;--bg2:#0d0d2b;--bg3:#16163a;--text:#fff;--text2:#ccc;--text3:#888;--text4:#aaa;--accent:#ffd700;--accent2:#ffd70044;--card-bg:rgba(0,0,0,0.5);--modal-bg:#16163a;--modal-border:#ffd70033;--sidebar-bg:#0d0d2b;--header-from:#0d0d2b;--header-to:#1a1a4e;--btn-border:#ffd70044;--btn-text:#ccc;--btn-active-text:#1a1a2e;--input-bg:#0d0d2b;--input-border:#ffd70044;--stat-bg:#0d0d2b;--stat-val:#ffd700;--stage-row-border:rgba(255,255,255,0.06);--sticky-bg:#0d0d2b;--confirm-bg:#0d0d2b;--diff-very-hard-bg:#E65100;--diff-hard-bg:#FF9800;--diff-average-bg:#FFEB3B;--diff-average-text:#333;--diff-easy-bg:#4CAF50;--diff-very-easy-bg:#8BC34A;--modal-shadow:0 8px 40px rgba(0,0,0,0.5);--notif-bg:#ffd700;--notif-text:#1a1a2e;--notif-shadow:0 4px 20px rgba(255,215,0,0.3);--sidebar-width:260px;--underline-color:#ffd70022;--char-name-dark:#333}
 [data-theme="light"]{--bg:#f5f0ef;--bg2:#e8e3e2;--bg3:#ffffff;--text:#1a1a2e;--text2:#333;--text3:#666;--text4:#555;--accent:#E04447;--accent2:#E0444733;--card-bg:rgba(0,0,0,0.06);--modal-bg:#ffffff;--modal-border:#E0444733;--sidebar-bg:#e8e3e2;--header-from:#C41E3A;--header-to:#E04447;--btn-border:#E0444733;--btn-text:#444;--btn-active-text:#fff;--input-bg:#fff;--input-border:#E0444755;--stat-bg:#e8e3e2;--stat-val:#C41E3A;--stage-row-border:rgba(0,0,0,0.06);--sticky-bg:#f5f0ef;--confirm-bg:#e8e3e2;--modal-shadow:0 8px 40px rgba(0,0,0,0.12);--notif-bg:#E04447;--notif-text:#fff;--notif-shadow:0 4px 20px rgba(224,68,71,0.3);--underline-color:rgba(0,0,0,0.08);--char-name-dark:#333}
-[data-theme="light"] header .logo h1{color:#fff}
 [data-theme="light"] #sidebar-toggle,
 [data-theme="light"] #theme-toggle,
 [data-theme="light"] #faq-toggle{color:#fff}
 [data-theme="light"] header{border-bottom-color:rgba(255,255,255,0.3)}
+
+/* Power Geyser color theme */
+[data-theme="dark"][data-move="pg"] {
+  --accent: #FF8C00;
+  --accent2: #FF8C0033;
+  --header-from: #2d1500;
+  --header-to: #4a2500;
+  --stat-val: #FF8C00;
+  --btn-border: #FF8C0044;
+  --input-border: #FF8C0044;
+  --modal-border: #FF8C0033;
+  --notif-bg: #FF8C00;
+  --notif-shadow: 0 4px 20px rgba(255,140,0,0.3);
+}
+[data-theme="light"][data-move="pg"] {
+  --accent: #E67E22;
+  --accent2: #E67E2233;
+  --header-from: #C0392B;
+  --header-to: #E67E22;
+  --stat-val: #E67E22;
+  --btn-border: #E67E2233;
+  --input-border: #E67E2255;
+  --modal-border: #E67E2233;
+  --notif-bg: #E67E22;
+  --notif-shadow: 0 4px 20px rgba(230,126,34,0.3);
+}
+
 .skip-link{position:fixed;top:-40px;left:8px;z-index:999;background:var(--accent);color:var(--btn-active-text);padding:8px 16px;border-radius:0 0 4px 4px;font-size:14px;font-weight:700;text-decoration:none;transition:top 0.2s}
 .skip-link:focus{top:0}
 body{margin:0;font-family:'Roboto',Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
@@ -30,9 +56,15 @@ body.no-scroll{overflow:hidden}
 
 header{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(135deg,var(--header-from),var(--header-to));height:56px;display:flex;align-items:center;padding:0 12px;border-bottom:2px solid var(--accent);box-shadow:0 2px 12px rgba(0,0,0,0.2)}
 header .logo{display:flex;align-items:center;gap:10px;flex:1}
-header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;margin:0;color:#E04447;text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 10px rgba(224,68,71,0.3)}
+header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;margin:0;color:var(--accent);text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 10px rgba(0,0,0,0.3)}
+[data-theme="light"][data-move="bw"] header .logo h1{color:#fff}
 
 .header-controls{display:flex;align-items:center;gap:6px}
+
+.move-tabs{display:flex;align-items:center;gap:2px;margin:0 8px}
+.move-tab{background:none;border:1px solid transparent;color:rgba(255,255,255,0.5);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700;font-family:'Oswald',sans-serif;transition:all 0.25s ease;text-transform:uppercase;letter-spacing:0.5px;line-height:1;white-space:nowrap}
+.move-tab.active{color:#fff;border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.1)}
+.move-tab:hover:not(.active){color:rgba(255,255,255,0.8);border-color:rgba(255,255,255,0.15)}
 
 #theme-toggle{background:none;border:none;color:var(--accent);font-size:20px;cursor:pointer;padding:6px;display:flex;align-items:center;border-radius:4px;transition:all 0.25s ease}
 #theme-toggle:hover{color:var(--text);background:rgba(255,255,255,0.1)}
@@ -179,6 +211,8 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
   .modal-inner{border-radius:0}
   #sidebar{width:100%;left:-100%}
   #sidebar.open{left:0}
+  .move-tabs{gap:1px}
+  .move-tab{font-size:9px;padding:3px 6px;letter-spacing:0.3px}
   .sticky-settings .btn-row{gap:2px}
   .sticky-settings .btn-row button{min-width:28px;padding:4px 4px;font-size:10px}
   .sticky-settings .settings-row label{font-size:9px}
@@ -190,8 +224,12 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
 <header>
   <button id="sidebar-toggle" aria-label="Open menu">&#9776;</button>
     <div class="logo">
-      <h1>BUSTER WOLF %</h1>
+      <h1>TERRY %</h1>
     </div>
+  <div class="move-tabs">
+    <button class="move-tab active" data-move="bw" title="Switch to Buster Wolf">Buster Wolf</button>
+    <button class="move-tab" data-move="pg" title="Switch to Power Geyser">Power Geyser</button>
+  </div>
   <div class="header-controls">
     <button id="theme-toggle" aria-label="Toggle dark/light mode">&#x263E;</button>
     <button id="faq-toggle" aria-label="Open FAQ">?</button>
@@ -318,7 +356,7 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
         </div>
       </div>
 
-      <div class="kill-section">
+      <div class="kill-section" id="modal-kill-section-bw">
         <h3>Kill Percents</h3>
         <div class="kill-boxes">
           <div class="kill-box">
@@ -332,18 +370,22 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
         </div>
       </div>
 
+      <div class="kill-section" id="modal-kill-section-pg" style="display:none">
+        <h3>Kill Percent</h3>
+        <div class="kill-boxes" style="grid-template-columns:1fr">
+          <div class="kill-box">
+            <div class="kill-val" id="modal-kill-pg"></div>
+            <div class="kill-label">Ceiling Kill</div>
+          </div>
+        </div>
+      </div>
+
       <div class="kill-section">
         <h3>All Stages</h3>
         <div id="modal-stages"></div>
       </div>
 
-      <div class="kill-section" style="margin-top:12px;padding:10px;background:var(--confirm-bg);border-radius:8px;font-size:12px;color:var(--text3)">
-        <strong style="color:var(--accent)">Kill confirms:</strong><br>
-        Dtilt → Buster Wolf (true ~60-90% depending on weight)<br>
-        Ftilt → Buster Wolf (pre-tumble, DI-dependent)<br>
-        Jab1+Jab2 → Buster Wolf<br>
-        <span style="display:block;margin-top:4px;font-size:11px;color:var(--text4)">Buster Wolf only available when Terry is at 100%+ (GO! meter active)</span>
-      </div>
+      <div class="kill-section" id="modal-confirms" style="margin-top:12px;padding:10px;background:var(--confirm-bg);border-radius:8px;font-size:12px;color:var(--text3)"></div>
     </div>
   </div>
 </div>
@@ -352,10 +394,11 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
   <div class="modal-inner">
     <div class="faq-header">
       <button class="faq-back" id="faq-close" aria-label="Close FAQ">&#x2190;</button>
-      <h2>About Buster Wolf</h2>
+      <h2>About Terry's Moves</h2>
     </div>
     <div class="modal-body" style="padding:0">
-      <div class="accordion">
+
+      <div class="accordion" id="faq-accordion-bw">
 
         <div class="accordion-item">
           <button class="accordion-btn" aria-expanded="false">What is Buster Wolf? <span class="arrow">&#x25BC;</span></button>
@@ -465,6 +508,116 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
         </div>
 
       </div>
+
+      <div class="accordion" id="faq-accordion-pg" style="display:none">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">What is Power Geyser? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>Power Geyser is Terry Bogard's second <strong>Super Special Move</strong> in Super Smash Bros. Ultimate. A massive vertical explosion that launches opponents upward — useful for <strong>ceiling KOs</strong>.</p>
+            <p><strong>Move data:</strong></p>
+            <p><strong>Input:</strong> <code>→ ↘ ↓ ↙ ← + A/B</code> (simplified: <code>→ ← ↓ → + A/B</code>)</p>
+            <p><strong>Availability:</strong> Only when Terry has <strong>100%+</strong> damage (GO! meter active)</p>
+            <p><strong>Damage:</strong> 26% (clean), 23% (mid), 20% (far)</p>
+            <p><strong>BKB:</strong> 100 | <strong>KBG:</strong> 41 | <strong>Angle:</strong> 70° (vertical)</p>
+            <p><strong>KO potential:</strong> Ceiling kill — depends on blast zone height. Generally kills <strong>~15-30% later</strong> than Buster Wolf at the ledge.</p>
+            <p class="note">Power Geyser's vertical launch means stage position matters less — the ceiling height is the same from anywhere on stage. The calculator uses the clean hit (26%) for all values.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">How does the knockback formula work? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>This calculator uses the <strong>exact SSBU knockback formula</strong>:</p>
+            <p><code>kb = ((p/10 + p × d / 20) × 1.4 × (200 / (weight + 100)) + 18) × (KBG / 100) + BKB</code></p>
+            <p>Where:</p>
+            <p><strong>p</strong> = opponent's pre-hit % + 26 (Power Geyser clean damage)<br>
+            <strong>d</strong> = 26 (base damage)<br>
+            <strong>weight</strong> = character weight (135 Bowser → 62 Pichu)<br>
+            <strong>BKB</strong> = 100, <strong>KBG</strong> = 41</p>
+            <p>After raw knockback, we apply:</p>
+            <p>1. <strong>Rage multiplier</strong> (1.0× at 100% → 1.1× at 150%)<br>
+            2. <strong>DI factor</strong> (1.0 no DI / 0.87 optimal DI)</p>
+            <p>The calculator uses <strong>binary search</strong> between 0-200% to find the exact percent where knockback exceeds the stage's ceiling blast zone threshold.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">What is rage and how does it affect kills? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>Rage is the knockback bonus Terry gets from his own damage. Since Power Geyser is only available at <strong>100%+</strong>, rage is always a factor for this move.</p>
+            <table>
+              <tr><th>Terry %</th><th>Multiplier</th></tr>
+              <tr><td>100%</td><td>1.00×</td></tr>
+              <tr><td>110%</td><td>1.02×</td></tr>
+              <tr><td>120%</td><td>1.04×</td></tr>
+              <tr><td>130%</td><td>1.06×</td></tr>
+              <tr><td>140%</td><td>1.08×</td></tr>
+              <tr><td>150%</td><td>1.10×</td></tr>
+            </table>
+            <p>Higher rage = lower opponent kill percent. At 150%, you'll kill roughly <strong>5-8% earlier</strong> than at 100%.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">What is DI and how does it affect kill percents? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p><strong>Directional Influence (DI)</strong> allows the opponent to slightly alter their launch trajectory. Against Power Geyser (70° angle), the optimal DI is <strong>perpendicular to the launch angle</strong>, which means DI <strong>sideways</strong> (left/right), which reduces total knockback by approximately <strong>13%</strong>.</p>
+            <table>
+              <tr><th>DI Setting</th><th>Knockback</th><th>Effect</th></tr>
+              <tr><td>No DI</td><td>100%</td><td>Baseline kill percents</td></tr>
+              <tr><td>Optimal DI</td><td>~87%</td><td>Kill percents ~5-10% higher</td></tr>
+            </table>
+            <p>When playing, assume your opponent will DI optimally. The "No DI" setting shows the theoretical best case for Terry.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">How do ceiling blast zones work? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>Each stage has different <strong>ceiling blast zone</strong> heights — the invisible ceiling where vertical KOs happen. Power Geyser launches at 70°, so ceiling height matters most. Unlike horizontal kills, your position on stage doesn't affect the distance to the ceiling.</p>
+            <table>
+              <tr><th>Stage</th><th>Ceiling KB</th></tr>
+              <tr><td>Final Dest.</td><td>190.0</td></tr>
+              <tr><td>Battlefield</td><td>203.0</td></tr>
+              <tr><td>Smashville</td><td>201.0</td></tr>
+              <tr><td>Town &amp; City</td><td>206.0</td></tr>
+              <tr><td>Pokémon Stad.</td><td>190.0</td></tr>
+              <tr><td>Kalos League</td><td>203.0</td></tr>
+              <tr><td>Hollow Bastion</td><td>190.0</td></tr>
+              <tr><td>Yggdrasil</td><td>190.0</td></tr>
+            </table>
+            <p><strong>Pokémon Stadium 2, Hollow Bastion, Yggdrasil and Final Destination</strong> have the lowest ceilings (easiest to kill vertically).<br>
+            <strong>Town &amp; City</strong> has the highest ceiling (hardest to kill vertically).</p>
+            <p>Since Power Geyser is a launcher, stage position doesn't matter — the kill percent is the same from center stage or the ledge.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">How do I confirm into Power Geyser? <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p><strong>Kill confirms:</strong></p>
+            <p><strong>F-tilt → Power Geyser:</strong> Works at higher percents than Buster Wolf confirms. DI-dependent.</p>
+            <p><strong>D-tilt → Power Geyser:</strong> True at certain percent ranges. A reliable confirm.</p>
+            <p><strong>Jab 1+2 → Power Geyser:</strong> Works at low-mid percents. Easy to execute.</p>
+            <p><strong>Key tips:</strong></p>
+            <p>Power Geyser is a strong <strong>tech chase tool</strong> — use it when you read a getup option.<br>
+            Unlike Buster Wolf, Power Geyser is <strong>not a hitgrab</strong>, so it can be shielded. Use confirms to make it safe.<br>
+            The <strong>clean hit (26%)</strong> is the only hitbox that matters for kill power — make sure you're close enough.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" aria-expanded="false">The origin of Power Geyser <span class="arrow">&#x25BC;</span></button>
+          <div class="accordion-panel">
+            <p>Power Geyser first appeared in <em>Real Bout Fatal Fury 2</em> (1995) as Terry Bogard's Super Special Move. Unlike Buster Wolf (a physical rush punch), Power Geyser is a <strong>ground-based energy attack</strong> that creates a massive vertical pillar of fire.</p>
+            <p>In the Fatal Fury series, Power Geyser was originally a <strong>command move</strong> (not a Super), performed with <code>↓ ↙ ← + C</code>. It gained its Super status in later installments.</p>
+            <p>Together, Power Geyser and Buster Wolf represent Terry's two signature techniques — <strong>fire</strong> and <strong>fist</strong> — making him one of the most iconic fighting game characters of all time.</p>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </div>
