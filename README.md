@@ -2,6 +2,8 @@
 
 Interactive kill percent calculator for Terry Bogard's **Super Special Moves** in Super Smash Bros. Ultimate. Switch between **Buster Wolf** (horizontal) and **Power Geyser** (vertical/ceiling). Shows exact KO percents for every character across 8 legal stages, with configurable rage and DI.
 
+▶ **[https://abzul.github.io/buster-wolf-calc/](https://abzul.github.io/buster-wolf-calc/)**
+
 ## Features
 
 - **Two moves** — Buster Wolf (horizontal, center/ledge) and Power Geyser (vertical, ceiling)
@@ -60,6 +62,3 @@ Character portraits loaded from Nintendo's [Smash Bros. CDN](https://www.smashbr
 
 Data and formula extracted from [rubendal/SSBU-Calculator](https://github.com/rubendal/SSBU-Calculator) and calibrated against SmashWiki community data.
 
-## Live site
-
-[https://abzul.github.io/buster-wolf-calc/](https://abzul.github.io/buster-wolf-calc/)
