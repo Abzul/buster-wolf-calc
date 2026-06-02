@@ -135,7 +135,8 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
 .modal-header .char-name{font-size:28px;font-weight:900;margin:0;font-family:'Oswald',sans-serif}
 .modal-header .char-name.text-dark{color:var(--char-name-dark)}
 .modal-header .char-name:not(.text-dark){color:#fff}
-.modal-header .back-btn{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.3);border:none;color:#fff;font-size:22px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.25s ease}
+.modal-header .back-btn{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.3);border:none;color:#fff;font-size:22px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.25s ease;z-index:2}
+.modal-header .back-btn::before{content:'';position:absolute;inset:-8px;border-radius:50%}
 .modal-header .back-btn:hover{background:rgba(0,0,0,0.6)}
 .modal-header .nav-arrows{position:absolute;top:12px;right:12px;display:flex;gap:4px}
 .modal-header .nav-arrows button{background:rgba(0,0,0,0.3);border:none;color:#fff;font-size:18px;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.25s ease}
