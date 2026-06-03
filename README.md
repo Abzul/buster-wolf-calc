@@ -11,7 +11,8 @@ Interactive kill percent calculator for Terry Bogard's **Super Special Moves** i
 - **SSBU knockback formula** — precise binary search calculation
 - **Rage slider** — Terry's rage multiplier from 100% to 150% (10% steps)
 - **DI toggle** — No DI vs optimal DI (0.87x)
-- **38 stages** — 8 competitive buttons (FD, BF, SV, TC, PS2, KPL, HB, YA) plus 30 extended stages via dropdown, each with individually adjusted blast zone thresholds
+- **8 competitive stages** — FD, BF, SV, TC, PS2, KPL, HB, YA — each with precisely labbed blast zone thresholds
+- **+30 extended stages** — drop down to any other legal stage; thresholds estimated from blast zone coordinates
 - **Stage search** — filter the extended dropdown to quickly find any stage
 - **Sort & search** — by name, weight, or fallspeed; live character search
 - **Kill percents** — center stage and ledge (BW), ceiling (PG), plus full per-stage breakdown
