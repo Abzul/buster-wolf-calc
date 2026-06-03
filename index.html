@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Buster Wolf % — Kill Percents</title>
-<meta name="description" content="Terry Bogard kill percent calculator for Super Smash Bros. Ultimate. Calculate exact KO percents for Buster Wolf and Power Geyser across all 88 characters, 8 stages, rage and DI settings.">
+<meta name="description" content="Terry Bogard kill percent calculator for Super Smash Bros. Ultimate. Calculate exact KO percents for Buster Wolf and Power Geyser across all 88 characters, multiple stages, rage and DI settings.">
 <meta property="og:title" content="Terry % Reference">
-<meta property="og:description" content="Terry Bogard kill percent calculator for SSBU. KO percents for Buster Wolf and Power Geyser, all 88 characters, 8 stages, rage &amp; DI settings.">
+<meta property="og:description" content="Terry Bogard kill percent calculator for SSBU. KO percents for Buster Wolf and Power Geyser, all 88 characters, multiple stages, rage &amp; DI settings.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://abzul.github.io/buster-wolf-calc/">
 <meta name="twitter:card" content="summary_large_image">
@@ -57,7 +57,7 @@ body.no-scroll{overflow:hidden}
 
 header{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(135deg,var(--header-from),var(--header-to));height:56px;display:flex;align-items:center;padding:0 12px;border-bottom:2px solid var(--accent);box-shadow:0 2px 12px rgba(0,0,0,0.2)}
 header .logo{display:flex;align-items:center;gap:10px;flex:1}
-header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;margin:0;color:var(--accent);text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 10px rgba(0,0,0,0.3)}
+header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;margin:0;color:var(--accent);text-transform:uppercase;letter-spacing:1px;text-shadow:0 0 10px rgba(0,0,0,0.3);cursor:pointer}
 [data-theme="light"][data-move="bw"] header .logo h1{color:#fff}
 
 .header-controls{display:flex;align-items:center;gap:6px}
@@ -93,6 +93,14 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
 .btn-row button:hover{border-color:var(--accent);color:var(--text);background:var(--accent2)}
 .btn-row button.active{background:var(--accent);color:var(--btn-active-text);border-color:var(--accent);font-weight:900}
 .btn-row .sort-option{flex:1;display:flex;align-items:center;justify-content:center;gap:4px}
+.stage-dropdown-row{margin-top:6px}
+.stage-dropdown-row select{width:100%;padding:6px 10px;font-size:11px;font-weight:700;font-family:'Roboto',sans-serif;background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);border-radius:20px;cursor:pointer;outline:none;transition:border-color 0.25s ease;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.stage-dropdown-row select:hover{border-color:var(--accent)}
+.stage-dropdown-row select:focus{border-color:var(--accent)}
+.stage-dropdown-row select option{background:var(--bg2);color:var(--text);padding:4px}
+.stage-search-input{width:100%;padding:4px 8px;font-size:11px;margin-bottom:4px;background:var(--input-bg);border:1px solid var(--input-border);color:var(--text);border-radius:20px;outline:none;transition:border-color 0.25s ease}
+.stage-search-input:focus{border-color:var(--accent)}
+.stage-search-input::placeholder{color:var(--text3)}
 
 #main{margin-top:56px;padding:8px}
 
@@ -257,8 +265,8 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
   <div class="filter-group">
     <label>DI</label>
     <div class="btn-row">
-      <button class="di-btn active" data-di="none">No DI</button>
-      <button class="di-btn" data-di="optimal">Optimal DI</button>
+      <button class="di-btn" data-di="none">No DI</button>
+      <button class="di-btn active" data-di="optimal">Optimal DI</button>
     </div>
   </div>
   <div class="filter-group">
@@ -272,6 +280,12 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
       <button class="stage-sel-btn" data-stage="kpl">KPL</button>
       <button class="stage-sel-btn" data-stage="hb">HB</button>
       <button class="stage-sel-btn" data-stage="ya">YA</button>
+    </div>
+    <div class="stage-dropdown-row">
+      <input type="text" id="stage-search" class="stage-search-input" placeholder="Filter stages..." autocomplete="off">
+      <select id="stage-select" aria-label="Other stages">
+        <option value="">— More Stages —</option>
+      </select>
     </div>
   </div>
   <div class="filter-group">

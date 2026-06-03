@@ -1,7 +1,7 @@
 let selectedMove = 'bw';
 let selectedChar = null;
 let selectedRage = RAGE_LEVELS[0];
-let selectedDI = 'none';
+let selectedDI = 'optimal';
 let selectedStage = 'fd';
 let sortMode = 'name';
 let sortAsc = true;
@@ -188,11 +188,11 @@ function switchMove(move) {
   document.title = isPg ? 'Power Geyser % — Kill Percents' : 'Buster Wolf % — Kill Percents';
   document.querySelector('meta[property="og:title"]').content = isPg ? 'Power Geyser % Reference' : 'Buster Wolf % Reference';
   let desc = isPg
-    ? 'Power Geyser kill percent calculator for Terry Bogard in Super Smash Bros. Ultimate. Calculate exact ceiling KO percents for all 88 characters across 8 stages with rage and DI settings.'
-    : 'Buster Wolf kill percent calculator for Terry Bogard in Super Smash Bros. Ultimate. Calculate exact KO percents for all 88 characters across 8 stages with rage and DI settings.';
+    ? 'Power Geyser kill percent calculator for Terry Bogard in Super Smash Bros. Ultimate. Calculate exact ceiling KO percents for all 88 characters across multiple stages with rage and DI settings.'
+    : 'Buster Wolf kill percent calculator for Terry Bogard in Super Smash Bros. Ultimate. Calculate exact KO percents for all 88 characters across multiple stages with rage and DI settings.';
   let ogDesc = isPg
-    ? 'Power Geyser kill percent calculator for Terry Bogard in SSBU. Ceiling KO percents for all 88 characters, 8 stages, rage & DI settings.'
-    : 'Buster Wolf kill percent calculator for Terry Bogard in SSBU. KO percents for all 88 characters, 8 stages, rage & DI settings.';
+    ? 'Power Geyser kill percent calculator for Terry Bogard in SSBU. Ceiling KO percents for all 88 characters, multiple stages, rage & DI settings.'
+    : 'Buster Wolf kill percent calculator for Terry Bogard in SSBU. KO percents for all 88 characters, multiple stages, rage & DI settings.';
   document.querySelector('meta[name="description"]').content = desc;
   document.querySelector('meta[property="og:description"]').content = ogDesc;
   if (selectedChar) {
@@ -421,13 +421,61 @@ function setupEventListeners() {
 
   document.querySelectorAll('.stage-sel-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-      document.querySelectorAll('.stage-sel-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      selectedStage = this.dataset.stage;
-      if (selectedChar) { updateModalContent(selectedChar); updateGridPercents(); }
-      else updateGridPercents();
+      setStage(this.dataset.stage);
     });
   });
+
+  document.getElementById('stage-select').addEventListener('change', function() {
+    if (this.value) {
+      setStage(this.value);
+    }
+  });
+
+  // Stage search filter
+  document.getElementById('stage-search').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    const sel = document.getElementById('stage-select');
+    [...sel.options].forEach(opt => {
+      if (!opt.value) return;
+      opt.style.display = opt.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+
+  // Populate stage dropdown
+  (function populateStageDropdown() {
+    const sel = document.getElementById('stage-select');
+    // Group: competitive (already have buttons) + extended
+    const mainKeys = ['fd','bf','sv','tc','ps2','kpl','hb','ya'];
+    const extended = Object.keys(STAGES).filter(k => !mainKeys.includes(k));
+    extended.forEach(key => {
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = STAGES[key].name;
+      sel.appendChild(opt);
+    });
+  })();
+
+  function setStage(key) {
+    document.querySelectorAll('.stage-sel-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    const btn = document.querySelector(`.stage-sel-btn[data-stage="${key}"]`);
+    if (btn) {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+    }
+    // Sync dropdown
+    const sel = document.getElementById('stage-select');
+    if ([...sel.options].some(o => o.value === key)) {
+      sel.value = key;
+    } else {
+      sel.value = '';
+    }
+    selectedStage = key;
+    if (selectedChar) { updateModalContent(selectedChar); updateGridPercents(); }
+    else updateGridPercents();
+  }
 
   document.querySelectorAll('.sort-option').forEach(opt => {
     opt.addEventListener('click', function() {
@@ -452,6 +500,10 @@ function setupEventListeners() {
     if (e.key === 'Escape' && document.getElementById('faq-modal').classList.contains('active')) closeFAQ();
     if (e.key === 'ArrowLeft' && selectedChar) navigateChar(-1);
     if (e.key === 'ArrowRight' && selectedChar) navigateChar(1);
+  });
+
+  document.querySelector('.logo h1').addEventListener('click', () => {
+    closeModal();
   });
 
   document.getElementById('sidebar-toggle').addEventListener('click', () => {
