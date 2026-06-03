@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Oswald:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box}
-:root{--bg:#1a1a2e;--bg2:#0d0d2b;--bg3:#16163a;--text:#fff;--text2:#ccc;--text3:#888;--text4:#aaa;--accent:#ffd700;--accent2:#ffd70044;--card-bg:rgba(0,0,0,0.5);--modal-bg:#16163a;--modal-border:#ffd70033;--sidebar-bg:#0d0d2b;--header-from:#0d0d2b;--header-to:#1a1a4e;--btn-border:#ffd70044;--btn-text:#ccc;--btn-active-text:#1a1a2e;--input-bg:#0d0d2b;--input-border:#ffd70044;--stat-bg:#0d0d2b;--stat-val:#ffd700;--stage-row-border:rgba(255,255,255,0.06);--sticky-bg:#0d0d2b;--confirm-bg:#0d0d2b;--diff-very-hard-bg:#E65100;--diff-hard-bg:#FF9800;--diff-average-bg:#FFEB3B;--diff-average-text:#333;--diff-easy-bg:#4CAF50;--diff-very-easy-bg:#8BC34A;--modal-shadow:0 8px 40px rgba(0,0,0,0.5);--notif-bg:#ffd700;--notif-text:#1a1a2e;--notif-shadow:0 4px 20px rgba(255,215,0,0.3);--sidebar-width:260px;--underline-color:#ffd70022;--char-name-dark:#333}
+:root{--bg:#1a1a2e;--bg2:#0d0d2b;--bg3:#16163a;--text:#fff;--text2:#ccc;--text3:#888;--text4:#aaa;--accent:#ffd700;--accent2:#ffd70044;--card-bg:rgba(0,0,0,0.5);--modal-bg:#16163a;--modal-border:#ffd70033;--sidebar-bg:#0d0d2b;--header-from:#0d0d2b;--header-to:#1a1a4e;--btn-border:#ffd70044;--btn-text:#ccc;--btn-active-text:#1a1a2e;--input-bg:#0d0d2b;--input-border:#ffd70044;--stat-bg:#0d0d2b;--stat-val:#ffd700;--stage-row-border:rgba(255,255,255,0.06);--sticky-bg:#0d0d2b;--confirm-bg:#0d0d2b;--modal-shadow:0 8px 40px rgba(0,0,0,0.5);--notif-bg:#ffd700;--notif-text:#1a1a2e;--notif-shadow:0 4px 20px rgba(255,215,0,0.3);--sidebar-width:260px;--underline-color:#ffd70022;--char-name-dark:#333}
 [data-theme="light"]{--bg:#f5f0ef;--bg2:#e8e3e2;--bg3:#ffffff;--text:#1a1a2e;--text2:#333;--text3:#666;--text4:#555;--accent:#E04447;--accent2:#E0444733;--card-bg:rgba(0,0,0,0.06);--modal-bg:#ffffff;--modal-border:#E0444733;--sidebar-bg:#e8e3e2;--header-from:#C41E3A;--header-to:#E04447;--btn-border:#E0444733;--btn-text:#444;--btn-active-text:#fff;--input-bg:#fff;--input-border:#E0444755;--stat-bg:#e8e3e2;--stat-val:#C41E3A;--stage-row-border:rgba(0,0,0,0.06);--sticky-bg:#f5f0ef;--confirm-bg:#e8e3e2;--modal-shadow:0 8px 40px rgba(0,0,0,0.12);--notif-bg:#E04447;--notif-text:#fff;--notif-shadow:0 4px 20px rgba(224,68,71,0.3);--underline-color:rgba(0,0,0,0.08);--char-name-dark:#333}
 [data-theme="light"] #sidebar-toggle,
 [data-theme="light"] #theme-toggle,
@@ -153,7 +153,7 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
 .modal-body{padding:12px 16px;transition:transform 0.15s ease,opacity 0.15s ease}
 .modal-body.slide-out{transform:translateX(-16px);opacity:0}
 
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
 .stat-card{background:var(--stat-bg);border-radius:8px;padding:8px 6px;text-align:center}
 .stat-card .stat-icon{font-size:14px;display:block;margin-bottom:2px;opacity:0.5}
 .stat-card .stat-val{font-size:22px;font-weight:900;color:var(--stat-val);font-family:'Oswald',sans-serif}
@@ -166,13 +166,6 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
 .kill-box .kill-val{font-size:36px;font-weight:900;color:#ff4444;font-family:'Oswald',sans-serif;line-height:1}
 .kill-box .kill-val.good{color:#4CAF50}
 .kill-box .kill-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-
-.diff-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:700;text-transform:uppercase}
-.very-hard{background:var(--diff-very-hard-bg);color:#fff}
-.hard{background:var(--diff-hard-bg);color:#fff}
-.average{background:var(--diff-average-bg);color:var(--diff-average-text)}
-.easy{background:var(--diff-easy-bg);color:#fff}
-.very-easy{background:var(--diff-very-easy-bg);color:#fff}
 
 .stages-table{width:100%;border-collapse:collapse;font-size:13px}
 .stages-table th{text-align:center;padding:6px 8px;color:var(--accent);font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--underline-color)}
@@ -369,11 +362,7 @@ header .logo h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:900;m
           <div class="stat-val" id="modal-gravity"></div>
           <div class="stat-label">Gravity</div>
         </div>
-        <div class="stat-card">
-          <span class="stat-icon">&#x2B50;</span>
-          <div class="stat-val"><span id="modal-difficulty"></span></div>
-          <div class="stat-label">Difficulty</div>
-        </div>
+
       </div>
 
       <div class="kill-section" id="modal-kill-section-bw">
