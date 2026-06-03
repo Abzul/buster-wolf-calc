@@ -100,5 +100,6 @@ const RAGE_LEVELS = [
 
 const DI_FACTORS = {
   none: 1.0,
-  optimal: 0.87
+  optimal: 0.87,
+  training: 0.92
 };
