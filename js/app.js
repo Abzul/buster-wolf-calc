@@ -126,26 +126,30 @@ function updateModalContent(c) {
   if (isBW()) {
     let centerPerc = findKillPercent(c.weight, stage.centerKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
     let ledgePerc = findKillPercent(c.weight, stage.ledgeKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
-    let diff = computeDifficulty(ledgePerc, centerPerc);
-
     document.getElementById('modal-center').textContent = centerPerc + '%';
     document.getElementById('modal-ledge').textContent = ledgePerc + '%';
     document.getElementById('modal-kill-section-bw').style.display = '';
     document.getElementById('modal-kill-section-pg').style.display = 'none';
 
-    let diffEl = document.getElementById('modal-difficulty');
-    diffEl.textContent = diff.label;
-    diffEl.className = 'diff-badge ' + diff.class;
-
+    const COMPETITIVE = ['fd','bf','sv','tc','ps2','kpl','hb','ya'];
     let stagesContainer = document.getElementById('modal-stages');
-    let html = '<table class="stages-table"><thead><tr><th>Stage</th><th>Center</th><th>Ledge</th><th>Diff</th></tr></thead><tbody>';
-    for (let [key, s] of Object.entries(STAGES)) {
+    let html = '<table class="stages-table"><thead><tr><th>Stage</th><th>Center</th><th>Ledge</th></tr></thead><tbody>';
+    COMPETITIVE.forEach(key => {
+      let s = STAGES[key];
       let ctr = findKillPercent(c.weight, s.centerKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
       let ldg = findKillPercent(c.weight, s.ledgeKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
-      let d = computeDifficulty(ldg, ctr);
-      html += `<tr><td class="stg">${s.label}</td><td class="ctr">${ctr}%</td><td class="ldg">${ldg}%</td><td><span class="diff-badge ${d.class}" style="font-size:10px">${d.label}</span></td></tr>`;
-    }
+      html += `<tr><td class="stg">${s.label}</td><td class="ctr">${ctr}%</td><td class="ldg">${ldg}%</td></tr>`;
+    });
+    html += '</tbody>';
+    html += '<tbody id="extended-stages-body" style="display:none">';
+    Object.entries(STAGES).forEach(([key, s]) => {
+      if (COMPETITIVE.includes(key)) return;
+      let ctr = findKillPercent(c.weight, s.centerKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+      let ldg = findKillPercent(c.weight, s.ledgeKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+      html += `<tr><td class="stg">${s.label}</td><td class="ctr">${ctr}%</td><td class="ldg">${ldg}%</td></tr>`;
+    });
     html += '</tbody></table>';
+    html += '<button id="toggle-extended-btn" style="margin-top:6px;background:none;border:1px solid var(--accent2);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;width:100%">Show all 38 stages ▼</button>';
     stagesContainer.innerHTML = html;
 
     document.getElementById('modal-confirms').innerHTML =
@@ -161,13 +165,23 @@ function updateModalContent(c) {
     document.getElementById('modal-kill-section-bw').style.display = 'none';
     document.getElementById('modal-kill-section-pg').style.display = '';
 
+    const COMPETITIVE = ['fd','bf','sv','tc','ps2','kpl','hb','ya'];
     let stagesContainer = document.getElementById('modal-stages');
     let html = '<table class="stages-table"><thead><tr><th>Stage</th><th>Kill %</th></tr></thead><tbody>';
-    for (let [key, s] of Object.entries(STAGES)) {
+    COMPETITIVE.forEach(key => {
+      let s = STAGES[key];
       let k = findKillPercent(c.weight, s.ceilingKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
       html += `<tr><td class="stg">${s.label}</td><td class="ctr">${k}%</td></tr>`;
-    }
+    });
+    html += '</tbody>';
+    html += '<tbody id="extended-stages-body" style="display:none">';
+    Object.entries(STAGES).forEach(([key, s]) => {
+      if (COMPETITIVE.includes(key)) return;
+      let k = findKillPercent(c.weight, s.ceilingKB, selectedRage.mult, DI_FACTORS[selectedDI], move);
+      html += `<tr><td class="stg">${s.label}</td><td class="ctr">${k}%</td></tr>`;
+    });
     html += '</tbody></table>';
+    html += '<button id="toggle-extended-btn" style="margin-top:6px;background:none;border:1px solid var(--accent2);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;width:100%">Show all 38 stages ▼</button>';
     stagesContainer.innerHTML = html;
 
     document.getElementById('modal-confirms').innerHTML =
@@ -176,6 +190,16 @@ function updateModalContent(c) {
       'Ftilt \u2192 Power Geyser (DI-dependent)<br>' +
       'Jab1+Jab2 \u2192 Power Geyser<br>' +
       '<span style="display:block;margin-top:4px;font-size:11px;color:var(--text4)">Power Geyser available when Terry is at 100%+ (GO! meter active)</span>';
+  }
+
+  let toggleBtn = document.getElementById('toggle-extended-btn');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function() {
+      let body = document.getElementById('extended-stages-body');
+      let expanded = body.style.display !== 'none';
+      body.style.display = expanded ? 'none' : '';
+      this.textContent = expanded ? 'Show all 38 stages ▼' : 'Show less ▲';
+    });
   }
 }
 
@@ -237,15 +261,6 @@ function closeModal() {
   underlay.setAttribute('aria-hidden', 'true');
   releaseFocus();
   updateGridPercents();
-}
-
-function computeDifficulty(minP, maxP) {
-  let range = maxP - minP;
-  if (range <= 6)  return { label: 'VERY HARD', class: 'very-hard' };
-  if (range <= 11) return { label: 'HARD', class: 'hard' };
-  if (range <= 22) return { label: 'AVERAGE', class: 'average' };
-  if (range <= 30) return { label: 'EASY', class: 'easy' };
-  return { label: 'VERY EASY', class: 'very-easy' };
 }
 
 function navigateChar(dir) {
